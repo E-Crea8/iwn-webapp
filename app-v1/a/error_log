@@ -1,0 +1,4 @@
+[03-Mar-2021 16:10:33 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home2/iwnng1/public_html/app/app-v1/a/app-controller/functions.php on line 70
+[03-Mar-2021 16:33:43 UTC] PHP Warning:  session_start(): Cannot start session when headers already sent in /home2/iwnng1/public_html/app/session.php on line 4
+[03-Mar-2021 16:34:21 UTC] PHP Warning:  session_start(): Cannot start session when headers already sent in /home2/iwnng1/public_html/app/session.php on line 4
+[03-Mar-2021 16:36:37 UTC] PHP Warning:  session_start(): Cannot start session when headers already sent in /home2/iwnng1/public_html/app/session.php on line 4
