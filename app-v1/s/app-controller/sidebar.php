@@ -27,55 +27,22 @@
 
             <!-- IAS Menu Categories -->
             <li>
-                          <a href="#" class="has-dropdown"><i class="ion ion-ios-gear"></i><span>Site Survey Form</span></a>
+                          <a href="#" class="has-dropdown"><i class="ion ion-ios-home"></i><span>Site Survey Form</span></a>
                           <ul class="menu-dropdown">
-                          <li><a href="customer-details"><i class="ion ion-android-radio-button-on"></i> Customer Details</a></li>
+                          <li><a href="site-survey-customer-details"><i class="ion ion-android-radio-button-on"></i> Customer Details</a></li>
                           <li><a href="site-survey-media-upload"><i class="ion ion-android-radio-button-on"></i> Media Uploads</a></li>
-                          <li><a href="other-info"><i class="ion ion-android-radio-button-on"></i> Other Info</a></li>
-                          <!-- <li><a href="requisition-form"><i class="ion ion-android-radio-button-on"></i> Requisition Form</a></li>
-                          <li><a href="work-order-form"><i class="ion ion-android-radio-button-on"></i> Work Order Form</a></li>
-                          <li><a href="installation-report-form"><i class="ion ion-android-radio-button-on"></i> Installation Report</a></li> -->
+                          <li><a href="site-survey-record"><i class="ion ion-android-radio-button-on"></i> Manage Records</a></li>
                           </ul>
                         </li>
             <li>
 
+
+
             
-
-            <!-- <li class="menu-header">Forms</li> -->
-
-            <!-- Book Categories -->
-            <!-- <li>
-              <a href="#" class="has-dropdown"><i class="ion ion-ios-gear"></i><span>Equipments</span></a>
-              <ul class="menu-dropdown">
-                <li><a href="equipment-lease-form"><i class="ion ion-android-radio-button-on"></i> Lease Form</a></li>
-                <li><a href="retrieval-form"><i class="ion ion-android-radio-button-on"></i> Retrieval Form</a></li>
-                <li><a href="change-equipment-order-form"><i class="ion ion-android-radio-button-on"></i> Change Order Form</a></li>
-
-              </ul>
-            </li> -->
-
-
-            <!-- Manage All Form Data -->
-            <!-- <li>
-              <a href="#" class="has-dropdown"><i class="ion ion-document-text"></i><span>Manage Records</span></a>
-              <ul class="menu-dropdown">
-                <li><a href="ip-order-form-record"><i class="ion ion-android-radio-button-on"></i>IP order Form Record</a></li>
-                <li><a href="enterprise-order-record"><i class="ion ion-android-radio-button-on"></i> Enterprise Order Record</a></li>
-                <li><?php echo $linkMenu; ?></li>
-                <li><a href="equipment-lease-record"><i class="ion ion-android-radio-button-on"></i> Equipment Lease Record</a></li>
-                <li><a href="equipment-retrieval-record"><i class="ion ion-android-radio-button-on"></i> Equipment Retrieval Record</a></li>
-                <li><a href="equipment-change-record"><i class="ion ion-android-radio-button-on"></i> Equipment Change Record</a></li>
-              </ul>
-            </li> -->
 
 
             <li>
               <a href="#" id="sidebarLogout"><i class="ion ion-log-out"></i> Logout</a>
             </li>          </ul>
-          <!-- <div class="p-3 mt-4 mb-4">
-            <a href="http://stisla.multinity.com/" class="btn btn-danger btn-shadow btn-round has-icon has-icon-nofloat btn-block">
-              <i class="ion ion-help-buoy"></i> <div>Go PRO!</div>
-            </a>
-          </div> -->
         </aside>
       </div>

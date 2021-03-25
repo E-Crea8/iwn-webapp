@@ -19,8 +19,8 @@
   <link rel="stylesheet" href="../dist/modules/flag-icon-css/css/flag-icon.min.css">
   <link rel="stylesheet" href="../dist/css/demo.css">
   <link rel="stylesheet" href="../dist/css/style.css">
-  <link rel="stylesheet" href="./assets/sweetalert/css/sweetalert2.min.css">
-/
+  <link rel="stylesheet" href="../assets/sweetalert/css/sweetalert2.min.css">
+
 </head>
 
 <body>
@@ -96,10 +96,10 @@
                 </div>
                 <div class="card-wrap">
                   <div class="card-header">
-                    <h4>IP Order Form</h4>
+                    <h4>Site Survey Form</h4>
                   </div>
                   <div class="card-body">
-                    <?php noOfInternetServiceOrderForm(); ?>
+                    <?php noOfSiteSurveyForm(); ?>
                   </div>
                 </div>
               </div>
@@ -136,13 +136,13 @@
             </div> 
 
 <!-- Create short link to user regsitration form -->
-            <div style="border-radius: 2px; padding-left: 15px; width: 100%;"><h4 class="section-header">Customer Form Shortlinks</h4></div>
+            <!-- <div style="border-radius: 2px; padding-left: 15px; width: 100%;"><h4 class="section-header">Customer Form Shortlinks</h4></div>
             <div style="background-color: #FFFFFF; width: 100%;  margin-left: 15px; padding: 25px 15px;">
             <div style="font-weight: 500; margin-bottom: 30px;">Internet Service Order Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> shortlink here</span></div>
             
             <div style="font-weight: 500; margin-top: 10px;">Internet Service Change Order Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> shortlink here</span></div>
-          </div>
-          </div>
+          </div>-->
+          </div> 
         </section>
       </div>
       <footer class="main-footer">
@@ -158,8 +158,9 @@
 
   <!-- Sweet Alert -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="./assets/sweetalert/js/sweetalert2.min.js"></script>
+  <script src="../assets/sweetalert/js/sweetalert2.min.js"></script>
 
+  
   <script src="../dist/modules/jquery.min.js"></script>
   <script src="../dist/modules/popper.js"></script>
   <script src="../dist/modules/tooltip.js"></script>
@@ -170,6 +171,10 @@
   
   <script src="../dist/modules/chart.min.js"></script>
   <script src="../dist/modules/summernote/summernote-lite.js"></script>
+
+<!-- Data Table JS -->
+  <script src="../modules/datatables/datatables.min.js"></script>
+
 
   <script src="../dist/js/scripts.js"></script>
   <script src="../dist/js/custom.js"></script>
@@ -182,7 +187,7 @@
 
               swal.fire({
                       title: 'Confirm Logout!',
-                      text: "Are you sure you want to logout of the application?",
+                      text: "Are you sure you want to logout of the application",
                       icon: 'warning',
                       showCancelButton: true,
                       confirmButtonColor: '#3085d6',
@@ -193,7 +198,7 @@
                         window.location.href = "logout.php";
                         Swal.fire(
                           'Success!',
-                          'You have been logged out successfully.',
+                          'You have been logout successfully.',
                           'success'
                         )
                       }
@@ -210,7 +215,7 @@
 
                     swal.fire({
                       title: 'Confirm Logout!',
-                      text: "Are you sure you want to logout of the application?",
+                      text: "Are you sure you want to logout of the application",
                       icon: 'warning',
                       showCancelButton: true,
                       confirmButtonColor: '#3085d6',
@@ -221,7 +226,7 @@
                         window.location.href = "logout.php";
                         Swal.fire(
                           'Success!',
-                          'You have been logged out successfully.',
+                          'You have been logout successfully.',
                           'success'
                         )
                       }
@@ -230,6 +235,67 @@
             });
         });
     </script>
+
+    <!-- Data Table Script -->
+    <script>  
+ $(document).ready(function(){  
+      $('#siteSurveyFormData').DataTable();  
+ });  
+ </script>  
+
+
+
+<!-- Delete Enterprise Order Record Sweet Alert -->
+<script>
+ $(document).ready(function(){
+  
+  // readOrderForms* it will load products when document loads */
+  
+  $(document).on('click', '#delete-site-survey-form', function(e){
+   
+   var sLFId = $(this).data('form_id');
+   SwalDelete(sLFId);
+   e.preventDefault();
+  });
+  
+ });
+ 
+ function SwalDelete(sLFId){
+  
+  swal.fire({
+   title: 'Are you sure?',
+   text: "You won't be able to revert this!",
+   icon: 'warning',
+   showCancelButton: true,
+   confirmButtonsColor: '#3085d6',
+   cancelButtonColor: '#d33',
+   confirmButtonText: 'Yes, delete it!',
+   showLoaderOnConfirm: true,
+     
+   preConfirm: function() {
+     return new Promise(function(resolve) {
+          
+        $.ajax({
+        url: 'delete-site-survey-form',
+        type: 'POST',
+           data: 'delete='+sLFId,
+           dataType: 'json'
+        })
+        .done(function(response){
+         swal.fire('Deleted!', response.message, response.status, 6000);
+         location.reload(true);
+        })
+        .fail(function(){
+         swal.fire('Oops...', 'Something went wrong with delete process !', 'error');
+        });
+     });
+      },
+   allowOutsideClick: false     
+  }); 
+  
+ }
+ 
+</script>
 
 </body>
 </html>

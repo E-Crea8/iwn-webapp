@@ -72,16 +72,26 @@
 
                           <li class="menu-header">IAS Forms</li>
 
-            <li>
-                          <a href="#" class="has-dropdown"><i class="ion ion-ios-gear"></i><span>Site Survey Form</span></a>
+                          <li>
+                          <a href="#" class="has-dropdown"><i class="ion ion-ios-home"></i><span>Site Survey Form</span></a>
                           <ul class="menu-dropdown">
                           <li><a href="site-survey-customer-details"><i class="ion ion-android-radio-button-on"></i> Customer Details</a></li>
                           <li><a href="site-survey-media-upload"><i class="ion ion-android-radio-button-on"></i> Media Uploads</a></li>
-                          <li><a href="other-info"><i class="ion ion-android-radio-button-on"></i> Other Info</a></li>
+                          <li><a href="site-survey-record"><i class="ion ion-android-radio-button-on"></i> Manage Records</a></li>
                           </ul>
                         </li>
             <li>
 
+
+            <li>
+                          <a href="#" class="has-dropdown"><i class="ion ion-ios-home"></i><span>Work Order</span></a>
+                          <ul class="menu-dropdown">
+                          <li><a href="work-order-form"><i class="ion ion-android-radio-button-on"></i> Work Order Form</a></li>
+                          <li><a href="work-order-record"><i class="ion ion-android-radio-button-on"></i> Manage Record</a></li>
+                          <!-- <li><a href="site-survey-record"><i class="ion ion-android-radio-button-on"></i> Manage Records</a></li> -->
+                          </ul>
+                        </li>
+            <li>
 
 
             <li>

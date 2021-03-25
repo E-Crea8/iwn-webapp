@@ -139,7 +139,9 @@
             <div style="border-radius: 2px; padding-left: 15px; width: 100%;"><h4 class="section-header">Customer Form Shortlinks</h4></div>
             <div style="background-color: #FFFFFF; width: 100%;  margin-left: 15px; padding: 25px 15px;">
             <div style="font-weight: 500; margin-bottom: 30px;">Internet Service Order Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3bSXGWm </span></div>
-            
+
+            <div style="font-weight: 500; margin-top: 30px;">Enterprise Internet Service Order Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3f7VdLf </span></div>
+
             <div style="font-weight: 500; margin-top: 30px;">Internet Service Change Order Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/2NJg9MR </span></div>
 
             <div style="font-weight: 500; margin-top: 30px;">Equipment Lease Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3bcHHUf </span></div>

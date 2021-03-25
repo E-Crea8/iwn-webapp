@@ -12,7 +12,7 @@
     <!-- Shortcut Icon -->
     <link rel="shortcut icon" href="./../dist/img/favicon.fw.png">
 
-  <title>IWN App - Manage Change Order Record</title>
+  <title>IWN App - Manage Internet Service Order Record</title>
 
   <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/modules/ionicons/css/ionicons.min.css">

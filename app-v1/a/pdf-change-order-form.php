@@ -10,7 +10,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
   <!-- Shortcut Icon -->
   <link rel="shortcut icon" href="../../dist/img/favicon.fw.png">
-  <title>I-World Networks Web App</title>
+  <title>IWN App - Change Order Form</title>
 
   <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/modules/ionicons/css/ionicons.min.css">

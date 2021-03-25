@@ -80,15 +80,14 @@
           <div class="section-body">
             <div class="card">
               <div class="card-body">
-                <?php
-                if(isset($_POST['create-site-survey-customer-details'])){
-                  createSiteSurveyCustomerDetails(); //here goes the function call
+
+              <?php
+                if(isset($_POST['upload-media'])){
+                  createSiteSurveyMediaUpload(); //here goes the function call
                }
                ?>
 
-
-
-                <form name="create-site-survey-media-upload" method="POST" enctype="multipart/form-data">
+                <form name="create-site-survey-media-upload" method="POST" enctype="multipart/form-data" action="">
 
                 <div class="form-header-label">Media Details</div>
                 <!-- Row 1 -->
@@ -121,7 +120,7 @@
                         <option value="Pictures showing cabling route">Pictures showing cabling route</option>
                         <option value="Pictures of the link termination point ">Pictures of the link termination point </option>
                         
-                        <option value="Pictures of the LOS (line of site) while standing on the highest point">Pictures of the LOS (line of site) while standing on the highest point</option>
+                        <option value="Pictures of the LOS (line of sight) while standing on the highest point">Pictures of the LOS (line of sight) while standing on the highest point</option>
                         <option value="Pictures or video of the entire building from a distance">Pictures or video of the entire building from a distance</option>
                         <option value="Pictures showing router positioning point ">Pictures showing router positioning point </option>
 
@@ -133,128 +132,17 @@
                 <div class="row">
                     <div class="form-group col-12">
                       <label for="coordinate">Select Media <span style="font-size: 8px !important;"> (File Formats: jpg, jpeg, png, mp4)</span></label>
-                      <input type="file" class="form-control" id="file" name="files[]" multiple />                    
+                      <input type="file" class="form-control" id="file" name="file[]" multiple />                    
                     </div>
-                    <!-- <div class="form-group col-6">
-                    <label for="email">Email Address</label>
-                      <input id="email" type="email" class="form-control" name="email" autofocus required>
-                    </div> -->
-                  </div>
-
-                  <!-- <div class="form-header-label">Picture and Other Details</div>
-                  Row 3
-                  <div class="row">
-                    <div class="form-group col-12">
-                      <label>Picture(s) of Highest Height on site</label>
-                      <input type="file" class="form-control" id="file" name="files[]" multiple />                    
-                      </div>
-                  </div>
-
-                  Row 4
-                  <div class="row">
-                    <div class="form-group col-12">
-                      <label for="coordinate">Accurate GPS Coordinate</label>
-                      <input id="coordinate" type="text" class="form-control" name="coordinate" autofocus required>
-                    </div>
-                    <div class="form-group col-6">
-                    <label for="email">Email Address</label>
-                      <input id="email" type="email" class="form-control" name="email" autofocus required>
-                    </div> 
-                  </div>-->
-
-
-
-
-                  <!-- <div class="form-header-label">Contact Person Information (Technical)</div>
-                Row 4
-                <div class="row">
-                    <div class="form-group col-6">
-                      <label for="cp_name">Name</label>
-                      <input id="cpName" type="text" class="form-control" name="cp_name" autofocus required>
-                    </div>
-                    <div class="form-group col-6">
-                    <label for="cp_phone">Mobile Number</label>
-                      <input id="cpPhone" type="text" class="form-control" name="cp_phone" autofocus required>
-                    </div>
-                  </div>
-
-                  Row 5
-                  <div class="row">
-                    <div class="form-group col-12">
-                      <label>Email Address</label>
-                      <input id="cpEmail" type="email" class="form-control" name="cp_email" autofocus required>
-                    </div>
-                  </div>
-                  
-                  <div class="form-header-label">Contact Person Information (Billing)</div>
-                Row 6
-                <div class="row">
-                    <div class="form-group col-6">
-                      <label for="cpb_name">Name</label>
-                      <input id="cpbName" type="text" class="form-control" name="cpb_name" autofocus required>
-                    </div>
-                    <div class="form-group col-6">
-                    <label for="cpb_phone">Mobile Number</label>
-                      <input id="cpbPhone" type="text" class="form-control" name="cpb_phone" autofocus required>
-                    </div>
-                  </div>
-
-                  Row 7
-                  <div class="row">
-                    <div class="form-group col-12">
-                      <label>Email Address</label>
-                      <input id="cpbEmail" type="email" class="form-control" name="cpb_email" autofocus required>
-                    </div>
-                  </div>
-
-                  <div class="form-header-label">Choose Subscription Plan</div>
-                Row 8
-                <div class="row">
-                    <div class="form-group col-6">
-                      <label for="plan">Subscription Plan</label>
-                      <select class="form-control" id="subPlan" name="plan" required>
-                        <option disabled="disabled" selected="selected">Choose a Plan</option>
-                        <option disabled="disabled" selected="selected">Home/Residential Unlimited Plan</option>
-
-                        <option value="H-LITE Unlimited (₦18,275)">H-LITE Unlimited (₦18,275)</option>
-                        <option value="H-MAX Unlimited (₦26,875)">H-MAX Unlimited (₦26,875)</option>
-                        <option value="H-PRO Unlimited (₦32,250)">H-PRO Unlimited (₦32,250)</option>
-                        
-                        <option disabled="disabled" selected="selected">SME's Unlimited Plan</option>
-                        <option value="U-LITE (₦21,500)">U-LITE (₦21,500)</option>
-                        <option value="U-MAX (₦32,250)">U-MAX (₦32,250)</option>
-                        <option value="U-PRO (₦43,000)">U-PRO (₦43,000)</option>
-
-                      </select>
-                    </div>
-                    <div class="form-group col-6">
-                      <label for="non_recurrent_cost">Non Recurrent Cost</label>
-                      <input id="nonRecurrentCost" type="number" class="form-control" name="non_recurrent_cost" autofocus required>
-                    </div>
-                </div>
-
-                  Row 9
-                  <div class="row">
-                  <div class="form-group col-6">
-                      <label for="installation_date">Site Survey/Installation Date</label>
-                      <input id="installationDate" type="date" class="form-control" name="installation_date" autofocus required>
-                    </div>
-                  
-                    <div class="form-group col-6">
-                      <label>Official Use <span style="font-size: 8px !important;"> (Enter any other useful information here)</span></label>
-                      <textarea class="form-control" id="officialInfo" name="official_info" row="3" col="3" autofocus required></textarea>
-                    </div>
-                  </div>  -->
-
 
                   <div class="form-group">
                     <!-- <label for="email">User ID</label> -->
                     <input type="hidden" name="id_session" value="<?php echo $id_session; ?>" class="form-control" name="id_session">
                   </div>
 
-                  <div class="form-group">
-                    <button type="submit" name="create-site-survey-customer-details" class="btn btn-primary btn-block">
-                      Submit and Continue Form
+                  <div class="form-group col-12">
+                    <button type="submit" name="upload-media" class="btn btn-primary btn-block">
+                      Submit Form
                     </button>
                   </div>
                 </form>

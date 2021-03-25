@@ -778,6 +778,346 @@ function InternetServiceOrderForm($form_id){
 }
 
 
+// Function to create Enterprise order form
+function createEnterpriseServiceOrderForm(){
+    global $dbc;
+
+        $f_name = $_POST['f_name'];
+        $h_address = $_POST['h_address'];
+        $phone = $_POST['phone'];
+        $email = $_POST['email'];
+        $web_address = $_POST['web_address'];
+        $cp_name = $_POST['cp_name'];
+        $cp_phone = $_POST['cp_phone'];
+        $cp_email = $_POST['cp_email'];
+        $cpb_name = $_POST['cpb_name'];
+        $cpb_phone = $_POST['cpb_phone'];
+        $cpb_email = $_POST['cpb_email'];
+        $plan = $_POST['plan'];
+        $bandwidth_cost = $_POST['bandwidth_cost'];
+        $non_recurrent_cost = $_POST['non_recurrent_cost'];
+        $installation_date = $_POST['installation_date'];
+        $official_info = $_POST['official_info'];
+        $id_session = $_POST['id_session'];
+
+        // Create Random Unique Id
+        $randomUID = md5(microtime(true).mt_Rand());
+
+        // Get username for user for the history table
+        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
+    
+        $row=mysqli_fetch_array($doGetNameQuery);
+        $getEmail = $row['email'];
+
+        // Check if customer record existed in table
+
+        // Generate date - Lagos time format
+        date_default_timezone_set("Africa/Lagos");
+
+        $date = date('M d, Y');
+        // $date = date('M d, Y', time());
+        
+
+
+
+            // Insert into app history table
+            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new internet service order form for $f_name')";
+
+            $insertEnterpriseOrderForm = "INSERT INTO ent_order_form (f_name, h_address, phone, email, web_address, cp_name, cp_phone, cp_email, cpb_name, cpb_phone, cpb_email, plan, bandwidth_cost, non_recurrent_cost, installation_date, official_info, form_id, date_submitted) 
+            VALUES ('$f_name', '$h_address', '$phone', '$email', '$web_address', '$cp_name', '$cp_phone', '$cp_email', '$cpb_name', '$cpb_phone', '$cpb_email', '$plan', '$bandwidth_cost', '$non_recurrent_cost', '$installation_date', '$official_info', '$randomUID', '$date')";
+            $doEnterpriseOrderForm = mysqli_query($dbc, $insertEnterpriseOrderForm);
+            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+
+            echo '<script type="text/javascript">';
+            echo 'setTimeout(function () { swal.fire("Success!"," Enterprise order form for internet service created for '.$f_name.'.","success");';
+            echo '}, 1000);</script>';
+
+            // echo json_encode($doInsertCategoryName);
+
+
+        }
+
+
+// Function to manage enterprise order form
+function manageEnterpriseServiceOrderForm(){
+    global $dbc;
+    $selectEnterpriseOrderFormData = "SELECT * FROM ent_order_form ORDER BY id DESC";
+    $doSelectEnterpriseOrderFormData = mysqli_query($dbc, $selectEnterpriseOrderFormData);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectEnterpriseOrderFormData);
+
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+        <table id="enterpriseOrderFormData" class="table table-striped">
+        <thead style="font-size:12px;">
+            <tr>
+                <th>SN</th>
+                <th>Organization/Client Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th style="width: 20%;">Action</th>
+            </tr>
+        </thead>
+        <tfoot style="font-size:12px;">
+            <tr>
+            <th>SN</th>
+            <th>Organization/Client Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th style="width: 20%;">Action</th>
+</tr>
+        </tfoot>
+        ';
+        while($row = mysqli_fetch_array($doSelectEnterpriseOrderFormData))
+        
+        {
+            $sn++;
+            $entId = $row["id"];
+            $clientName = $row["f_name"];
+
+            // Create Random Unique Id
+            $randomUID = md5(microtime(true).mt_Rand());
+
+            echo '
+            <tr style="font-size:12px;">
+            <td> '.$sn.' </td>
+            <td> '.$row["f_name"].' </td>
+            <td> '.$row["h_address"].' </td>
+            <td> '.$row["phone"].' </td>
+            <td> <a href="edit-enterprise-service-order-form?id='.$row["id"].'" class="btn btn-sm btn-info" ><i class="ion-edit"></i></a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-danger" id="delete-enterprise-service-order-form" data-id="'.$entId.'"><i class="ion-trash-a"></i></a>
+            <a href="pdf-enterprise-service-order-form?form_id='.$row["id"].'&form_ref='.$randomUID.'" target=_blank class="btn btn-sm btn-primary" >PDF</a>
+            </td>
+            </tr>
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+
+}
+
+
+// Function to print Enterprise order form
+function EnterpriseServiceOrderForm($form_id){
+    global $dbc;
+    $selectEnterpriseOrderFormRecord = "SELECT * FROM ent_order_form WHERE id = '$form_id'";
+    $doSelectEnterpriseOrderFormRecord = mysqli_query($dbc, $selectEnterpriseOrderFormRecord);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectEnterpriseOrderFormRecord);
+
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+      <div class="container mt-0" id="enterpriseOrderForm">
+        ';
+        while($row = mysqli_fetch_array($doSelectEnterpriseOrderFormRecord))
+        
+        {
+            $sn++;
+            $entId = $row["id"];
+            $clientName = $row["f_name"];
+            $currentPrice = number_format($row["non_recurrent_cost"],2);
+
+            echo '
+            <div class="row" style=margin-bottom: 10px;">
+            <table style="width: 100%;">
+                <tr style="height: 80px; text-align: right; color: #FFFFFF; font-family: Georgia, Times New Roman, Times, serif; font-size: 11px; font-weight: 300;">
+                    <td> <img src="./../dist/img/IP-Order-Form-I-World-Networks-Logo.fw.png" alt="I-World Networks Logo"></td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 50px; text-align: center; padding: 40px 0px 20px 0px; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 700;">
+                    <td> <h4>ENTERPRISE SERVICE ORDER FORM</h4></td>
+                </tr>
+                <tr style="height: 40px; text-align: center; background-color: #DCDADB; text-transform: uppercase; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 600;">
+                    <td>client information</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> NAMES OF ORGANIZATIONS/CLIENTS: '.$row["f_name"].'</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> BUSINESS/HOME ADDRESS: '.$row["h_address"].'</td>
+        </tr>
+
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> TELEPHONE NUMBER: '.$row["phone"].'</td>
+                </tr>
+
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> EMAIL ADDRESS: '.$row["email"].'</td>
+                </tr>
+
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> WEB ADDRESS: '.$row["web_address"].'</td>
+                </tr>
+                </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+            <tr style="height: 35px; text-align: left;">
+                <td class="formField"> NAME OF CONTACT PERSON (TECHNICAL): '.$row["cp_name"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+                <td class="formField"> MOBILE NUMBER: '.$row["cp_phone"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+                <td class="formField"> EMAIL ADDRESS: '.$row["cp_email"].'</td>
+            </tr>
+
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+        <table class="table-bordered" style="width: 100%;">
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> NAME OF CONTACT PERSON (BILLING): '.$row["cpb_name"].'</td>
+        </tr>
+
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> MOBILE NUMBER: '.$row["cpb_phone"].'</td>
+        </tr>
+
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> EMAIL ADDRESS: '.$row["cpb_email"].'</td>
+        </tr>
+
+        </table>
+        </div>
+
+        <div style="padding: 5px;"></div> 
+        
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> PLAN: '.$row["plan"].'</td>
+            </tr>
+
+            <tr style="height: 30px; text-align: left;">
+            <td class="formField"> BANDWIDTH COST: &#8358;'.number_format($row["bandwidth_cost"],2).'</td>
+            </tr>
+
+
+            <tr style="height: 30px; text-align: left;">
+            <td class="formField"> NON-RECURRENT FEE: &#8358;'.number_format($row["non_recurrent_cost"],2).'</td>
+            </tr>
+            </table>
+        </div>
+
+        <div style="padding: 20px; margin-left: -35px; margin-top: -15px">
+        This is to request for a Site survey / Installation to be carried out by I-World Networks at the above address.<br>
+        This should be carried out on (date) '.$row["installation_date"].'
+        </div> 
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 40px; background-color: #DCDADB; text-align: center; text-transform: uppercase; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 600;">
+                    <td>official use</td>
+                </tr>
+            </table>
+        </div>
+        
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 50px; text-align: left;">
+                    <td style="padding-left: 10px;">'.$row["official_info"].'</td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="padding: 20px; margin-left: -35px; margin-bottom: 30px; margin-top: -15px">
+        <strong>NOTE:</strong> It is highly recommended that all internet equipment be protected against electrical surge by powering it through UPS or a stabilizer with a surge protector. 
+        Electrical damage of the equipment will not be catered for by I-World Networks.        
+        </div> 
+
+
+        <div class="row" style="margin-top: 0px; margin-bottom: 10px;">
+            <table style="width: 100%;">
+                <tr style="height: 50px; text-align: center;">
+                    <td style="text-align: center; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 400;"> ------------------------------------------------------<br>
+                        <span style="text-align: center;">Client Signature</span></td>
+                    <td style="text-align: center; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 400;"> ------------------------------------------------------<br>
+                    <span style="text-align: center;">Account Manager</span></td>
+                </tr>
+            </table>
+        </div>
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+    // Create dataTable here
+
+}
+
+
+
 // Function to create equipment lease form
 function createEquipmentLeaseForm(){
     global $dbc;
@@ -955,7 +1295,7 @@ function equipmentLeaseForm($form_id){
                 </tr>
                 <tr style="height: 40px; text-align: left;">
                     <td class="formField">This document is the internet equipment custody agreement between <strong>I-WORLD NETWORKS LTD</strong> and '.$row["client_name"].'<br>
-                    Located at Lagos bye pass, Beside Zenith Bank, Challenge ,Ibadan<br>
+                    Located at '.$row['address'].'<br>
                     On this date '.$row["date_submitted"].'</td>
                 </tr>
             </table>

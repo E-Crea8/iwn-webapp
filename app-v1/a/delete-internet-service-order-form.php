@@ -31,7 +31,7 @@ if ($_POST['delete']) {
  $response['message'] = 'Internet Service Order Form Deleted Successfully.';
     } else {
         $response['status']  = 'error';
- $response['message'] = 'Unable to Delete Change Order Form.';
+ $response['message'] = 'Unable to Delete Internet Service Order Form.';
     }
     echo json_encode($response);
 }
