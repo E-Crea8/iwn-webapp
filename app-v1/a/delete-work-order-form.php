@@ -12,18 +12,19 @@ if ($_POST['delete']) {
 
  
     $cId = intval($_POST['delete']);
-    $deleteQuery = "DELETE FROM change_internet_service_order_form WHERE id=$cId";
+    $deleteQuery = "DELETE FROM work_order_form WHERE id=$cId";
     $doDeleteQuery = mysqli_query($dbc, $deleteQuery);
+
 
     
     if ($doDeleteQuery == 1) {
         // $insertUserHistory = "INSERT INTO app_history (user_id, action) VALUES ('$getUserID', 'deleted a customer change order form')";
         // $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
         $response['status']  = 'success';
- $response['message'] = 'Change Order Form Deleted Successfully.';
+ $response['message'] = 'Work Order Form Deleted Successfully.';
     } else {
         $response['status']  = 'error';
- $response['message'] = 'Unable to Delete Change Order Form.';
+ $response['message'] = 'Unable to Delete Work Order Form.';
     }
     echo json_encode($response);
 }

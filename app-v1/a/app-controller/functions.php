@@ -2174,7 +2174,339 @@ function createWorkOrderForm(){
 
 
 
+// Function to manage work order form
+function manageWorkOrderForm(){
+    global $dbc;
+    $selectWorkOrderFormData = "SELECT * FROM work_order_form ORDER BY id DESC";
+    $doSelectWorkOrderFormData = mysqli_query($dbc, $selectWorkOrderFormData);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectWorkOrderFormData);
 
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+        <table id="workOrderFormData" class="table table-striped">
+        <thead style="font-size:12px;">
+            <tr>
+                <th>SN</th>
+                <th>Project Manager</th>
+                <th>Start Date</th>
+                <th>Delivery Date</th>
+                <th style="width: 20%;">Action</th>
+            </tr>
+        </thead>
+        <tfoot style="font-size:12px;">
+            <tr>
+            <th>SN</th>
+            <th>Project Manager</th>
+            <th>Start Date</th>
+            <th>Delivery Date</th>
+        <th style="width: 20%;">Action</th>
+</tr>
+        </tfoot>
+        ';
+        while($row = mysqli_fetch_array($doSelectWorkOrderFormData))
+        
+        {
+            $sn++;
+            $wId = $row["id"];
+            $pmName = $row["pm_name"];
+
+            // Create Random Unique Id
+            $randomUID = md5(microtime(true).mt_Rand());
+
+            echo '
+            <tr style="font-size:12px;">
+            <td> '.$sn.' </td>
+            <td> '.$row["title"].'&nbsp;'.$row["pm_name"].' </td>
+            <td> '.$row["start_date"].' </td>
+            <td> '.$row["delivery_date"].' </td>
+            <td><a href="view-work-order-form?form_id='.$row["id"].'&form_ref='.$randomUID.'" target=_blank class="btn btn-sm btn-primary"><i class="ion-ios-eye"></i></a>
+            <a href="edit-work-order-form?id='.$row["id"].'" class="btn btn-sm btn-info" ><i class="ion-edit"></i></a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-danger" id="delete-work-order-form" data-id="'.$wId.'"><i class="ion-trash-a"></i></a>
+            </td>
+            </tr>
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+
+}
+
+
+// Function to view work order form
+function workOrderForm($form_id){
+    global $dbc;
+    $selectWorkOrderFormRecord = "SELECT * FROM work_order_form WHERE id = '$form_id'";
+    $doSelectWorkOrderFormRecord = mysqli_query($dbc, $selectWorkOrderFormRecord);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectWorkOrderFormRecord);
+
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+      <div class="container mt-0" id="workOrderForm">
+        ';
+        while($row = mysqli_fetch_array($doSelectWorkOrderFormRecord))
+        
+        {
+            $sn++;
+            $wId = $row["id"];
+            $pmName = $row["pm_name"];
+            $materialAccessoriesFee = number_format($row["material_accessories_fee"],2);
+            $workOrderFee = number_format($row["work_order_fee"],2);
+
+            echo '
+            <div class="row" style=margin-bottom: 10px;">
+            <table style="width: 100%;">
+                <tr style="height: 80px; text-align: right; color: #FFFFFF; font-family: Georgia, Times New Roman, Times, serif; font-size: 11px; font-weight: 300;">
+                    <td> <img src="./../dist/img/IP-Order-Form-I-World-Networks-Logo.fw.png" alt="I-World Networks Logo"></td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 50px; text-align: center; padding: 40px 0px 20px 0px; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 700;">
+                    <td> <h4>WORK ORDER FORM</h4></td>
+                </tr>
+                <tr style="height: 40px; text-align: left; background-color: #DCDADB; text-transform: uppercase; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 600;">
+                    <td style="padding-left: 10px !important;">project manager details</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> NAME: '.$row["title"].'&nbsp;'.$row["pm_name"].'</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> PHONE NUMBER: '.$row["pm_phone"].'</td>
+        </tr>
+
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> EMAIL ADDRESS: '.$row["pm_email"].'</td>
+                </tr>
+
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> WHATSAPP: '.$row["pm_whatsapp"].'</td>
+                </tr>
+
+                </table>
+        </div>
+
+        <div class="row">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 40px; text-align: left; background-color: #DCDADB; text-transform: uppercase; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 600;">
+                    <td style="padding-left: 10px !important;">project details</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+            <tr style="height: 35px; text-align: left;">
+                <td class="formField"> START DATE: '.$row["start_date"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+                <td class="formField"> DELIVERY DATE: '.$row["delivery_date"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+                <td class="formField"> PROJECT OVERVIEW: '.$row["project_overview"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> REQUIRED TOOLS: '.$row["required_tools"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> STANDARD INSTRUCTION: '.$row["standard_instruction"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> <span style="text-transform: uppercase;">Link Budget & Installation Design URL:</span> '.$row["budget_url"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> <span style="text-transform: uppercase;">Installation Report URL:</span> '.$row["installation_report_url"].'</td>
+            </tr>
+
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> <span style="text-transform: uppercase;"> Equipment Pick Up time:</span> '.$row["pick_up_time"].'</td>
+            </tr>
+
+            </table>
+        </div>
+
+
+        <div class="row">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 40px; text-align: left; background-color: #DCDADB; text-transform: uppercase; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 600;">
+                    <td style="padding-left: 10px !important;">task checklist</td>
+                </tr>
+            </table>
+        </div>
+
+        
+
+        <div class="row" style="margin-top: 0px;">
+        <table class="table-bordered" style="width: 100%;">
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> PRE-VISIT: '.$row["pre_visit"].'</td>
+        </tr>
+
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> ON SITE: '.$row["on_site"].'</td>
+        </tr>
+
+        </table>
+        </div>
+
+
+        <div class="row">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 40px; text-align: left; background-color: #DCDADB; text-transform: uppercase; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 600;">
+                    <td style="padding-left: 10px !important;">FEES</td>
+                </tr>
+            </table>
+        </div>
+
+        
+
+        <div class="row" style="margin-top: 0px;">
+        <table class="table-bordered" style="width: 100%;">
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> <span style="text-transform: uppercase;"> Materials & Accessories:</span> &#8358;'.number_format($row["material_accessories_fee"],2).'</td>
+        </tr>
+
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> <span style="text-transform: uppercase;"> Work order Fee:</span> &#8358;'.number_format($row["work_order_fee"],2).' </td>
+        </tr>
+
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> <span style="text-transform: uppercase;"> APPROVED  BY:</span> '.$row["approved_by"].'</td>
+        </tr>
+
+        
+        <div style="margin-bottom: 120px;"></div>
+        </table>
+        </div>
+
+
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+    // Create dataTable here
+
+}
+
+
+// Function to create equipment change order form
+function createEquipmentChangeOrderForm(){
+    global $dbc;
+
+        $customer_name = $_POST['customer_name'];
+        $customer_address = $_POST['customer_address'];
+        $customer_email = $_POST['customer_email'];
+        $customer_phone = $_POST['customer_phone'];
+        $acct_mgr_name = $_POST['acct_mgr_name'];
+        $acct_mgr_email = $_POST['acct_mgr_email'];
+        $current_plan = $_POST['current_plan'];
+        $current_plan_price = $_POST['current_plan_price'];
+        $req_new_plan = $_POST['req_new_plan'];
+        $new_plan_price = $_POST['new_plan_price'];
+        $change_date = $_POST['change_date'];
+        $change_req_by = $_POST['change_req_by'];
+        $remarks = $_POST['remarks'];
+        $id_session = $_POST['id_session'];
+
+        // Create Random Unique Id
+        $randomUID = md5(microtime(true).mt_Rand());
+
+        // Get username for user for the history table
+        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
+    
+        $row=mysqli_fetch_array($doGetNameQuery);
+        $getEmail = $row['email'];
+
+        // Check if customer record existed in table
+
+
+
+            // Insert into app history table
+            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new internet service change order form for $customer_name')";
+
+            $insertChangeOrderForm = "INSERT INTO change_internet_service_order_form (customer_name, customer_address, customer_email, customer_phone, acct_mgr_name, acct_mgr_email, current_plan, current_plan_price, req_new_plan, new_plan_price, change_date, change_req_by, remarks, form_id) 
+            VALUES ('$customer_name', '$customer_address', '$customer_email', '$customer_phone', '$acct_mgr_name', '$acct_mgr_email', '$current_plan', '$current_plan_price', '$req_new_plan', '$new_plan_price', '$change_date', '$change_req_by', '$remarks', '$randomUID')";
+            $doInsertChangeOrderForm = mysqli_query($dbc, $insertChangeOrderForm);
+            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+
+            echo '<script type="text/javascript">';
+            echo 'setTimeout(function () { swal.fire("Success!"," Change order form for internet service created for '.$customer_name.'.","success");';
+            echo '}, 1000);</script>';
+
+            // echo json_encode($doInsertCategoryName);
+
+
+        }
 
 ////////////////////////////////////// OTHER APP FUNCTIONS ///////////////////////////////////////////////////////////
 // Function to update user profile
