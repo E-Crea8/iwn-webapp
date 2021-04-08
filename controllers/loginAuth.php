@@ -67,8 +67,44 @@ if ($hashPassword == ''){
                 $getEmail = $_SESSION['email'];
                 $dept = $_SESSION['department'];
 
-        //login as super administrator if department is Web
-        if ($email == $_SESSION['email'] && $hashPassword == $_SESSION['password'] && $dept == 'Web'){
+        //login as super administrator if department is Super Admin
+        if ($email == $_SESSION['email'] && $hashPassword == $_SESSION['password'] && $dept == 'Super Admin'){
+          $userLoginHistory = "INSERT INTO app_history (id,email,action,date)VALUES(Null,'$getEmail','Logged In',Null)";
+          mysqli_query($dbc,$userLoginHistory)or die ('Error in adding User Action to app history table');
+
+          ?>    
+             
+             <?php
+
+                  echo '
+                  <script>
+                  setTimeout(function () { 
+                    swal.fire({
+                      title: "Login Successful!",
+                      text: "Welcome back, '.$_SESSION['firstname'].'",
+                      icon: "success",
+                      confirmButtonText: "Proceed to Dashboard"
+                    }
+                    )
+                    .then(function (result) {
+                      if (result.value) {
+                          window.location = "./app-v1/sa/dashboard";
+                      }
+                  }); }, 1000); 
+                    </script>                 
+                  
+                  ';
+                      
+
+
+            ?>
+
+             <?php        
+           
+        }
+
+        //login as  administrator if department is Admin
+        if ($email == $_SESSION['email'] && $hashPassword == $_SESSION['password'] && $dept == 'Admin'){
           $userLoginHistory = "INSERT INTO app_history (id,email,action,date)VALUES(Null,'$getEmail','Logged In',Null)";
           mysqli_query($dbc,$userLoginHistory)or die ('Error in adding User Action to app history table');
 
@@ -102,6 +138,7 @@ if ($hashPassword == ''){
              <?php        
            
         }
+
 
         //login as business if department is Business
         if ($email == $_SESSION['email'] && $hashPassword == $_SESSION['password'] && $dept == 'Business'){

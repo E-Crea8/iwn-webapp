@@ -10,7 +10,7 @@
   <!-- Shortcut Icon -->
   <link rel="shortcut icon" href="../../dist/img/favicon.fw.png">
 
-  <title>IWN App - Equipment Change Order Form</title>
+  <title>IWN App - Internet Service Change Order Form</title>
 
   <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/modules/ionicons/css/ionicons.min.css">
@@ -72,19 +72,19 @@
       <div class="main-content">
         <section class="section">
           <h1 class="section-header">
-            <div>Create Change Order Form For Equipment</div>
+            <div>Create Change Order Form For Internet Service</div>
           </h1>
           <div class="section-body">
             <div class="card">
               <div class="card-body">
                 <?php
-                if(isset($_POST['create-equipment-change-order-form'])){
-                    createEquipmentChangeOrderForm(); //here goes the function call
+                if(isset($_POST['create-change-order-form'])){
+                    createInternetChangeOrderForm(); //here goes the function call
                }
                ?>
 
 
-                <form name="create-equipment-change-order-form" method="POST">
+                <form name="create-ip-order-form" method="POST">
 
                 <div class="form-header-label">Section A: Equipment Replacement</div>
                 <!-- Row 1 -->
@@ -111,73 +111,98 @@
                     </div>
                   </div>
 
-
+                  <div class="form-header-label">Section B: Account Manager's Details </div>
                 <!-- Row 3 -->
                 <div class="row">
                     <div class="form-group col-6">
-                    <label for="equipment_removed">Equipment Removed (Type, MAC/MODEL)</label>
-                      <input id="equipmentRemoved" type="text" class="form-control" name="equipment_removed" autofocus required>
+                      <label for="acct_mgr_name">Account Manager's Name</label>
+                      <input id="acctMgrName" type="text" class="form-control" name="acct_mgr_name" autofocus required>
                     </div>
                     <div class="form-group col-6">
-                    <label for="equipment_replaced">Equipment Replaced (Type, MAC/MODEL)</label>
-                      <input id="equipmentReplaced" type="text" class="form-control" name="equipment_replaced" autofocus required>
+                        <label for="acct_mgr_email">Account Manager's Email</label>
+                        <input id="acctMgrEmail" type="email" class="form-control" name="acct_mgr_email" autofocus required>
                     </div>
                   </div>
 
-
+                  <div class="form-header-label">Service change details</div>
                 <!-- Row 4 -->
                 <div class="row">
                     <div class="form-group col-6">
-                    <label for="equipment_change_date">Date of Equipment Change</label>
-                      <input id="equipmentChangeDate" type="date" class="form-control" name="equipment_change_date" autofocus required>
+                      <label for="current_plan">Current Plan</label>
+                      <select class="form-control" id="currentPlan" name="current_plan" required>
+                        <option disabled="disabled" selected="selected">Select Plan</option>
+                        <option disabled="disabled">Home/Residential Unlimited Plan</option>
+
+                        <option value="H-LITE Unlimited">H-LITE Unlimited</option>
+                        <option value="H-MAX Unlimited">H-MAX Unlimited</option>
+                        <option value="H-PRO Unlimited">H-PRO Unlimited</option>
+                        
+                        <option disabled="disabled">SME's Unlimited Plan</option>
+                        <option value="U-LITE">U-LITE</option>
+                        <option value="U-MAX">U-MAX</option>
+                        <option value="U-PRO">U-PRO</option>
+
+                      </select>
                     </div>
                     <div class="form-group col-6">
-                    <label for="equipment_change_time">Time of Equipment Change</label>
-                      <input id="equipmentChangeTime" type="time" class="form-control" name="equipment_change_time" autofocus required>
+                    <label for="current_plan_price">Price of Current Plan</label>
+                      <input id="crtPlanPrice" type="number" placeholder="e.g. 35000" class="form-control" name="current_plan_price" autofocus required>
                     </div>
                   </div>
 
                 <!-- Row 5 -->
                 <div class="row">
+                    <div class="form-group col-6">
+                      <label for="requested_new_plan">Requested New Plan</label>
+                      <select class="form-control" id="reqNewPlan" name="req_new_plan" required>
+                        <option disabled="disabled" selected="selected">Select Plan</option>
+                        <option disabled="disabled">Home/Residential Unlimited Plan</option>
+
+                        <option value="H-LITE Unlimited">H-LITE Unlimited</option>
+                        <option value="H-MAX Unlimited">H-MAX Unlimited</option>
+                        <option value="H-PRO Unlimited">H-PRO Unlimited</option>
+                        
+                        <option disabled="disabled">SME's Unlimited Plan</option>
+                        <option value="U-LITE">U-LITE</option>
+                        <option value="U-MAX">U-MAX</option>
+                        <option value="U-PRO">U-PRO</option>
+
+                      </select>
+                    </div>
+                    <div class="form-group col-6">
+                    <label for="new_plan_price">Price of New Plan</label>
+                      <input id="newPlanPrice" type="number" placeholder="e.g. 35000" class="form-control" name="new_plan_price" autofocus required>
+                    </div>
+                  </div>
+                  
+                  <!-- Row 6 -->
+                  <div class="row">
+                  <div class="form-group col-6">
+                      <label>Date of Change</label>
+                      <input id="changeDate" type="date" class="form-control" name="change_date" autofocus required>
+                    </div>
+                    <div class="form-group col-6">
+                      <label>Change Requested by:</label>
+                      <input id="changeReqBy" type="text" class="form-control" name="change_req_by" autofocus required>
+                    </div>
+                  </div>
+
+                  <!-- Row 7-->
+                  <div class="row">
                     <div class="form-group col-12">
-                    <label for="change_requested_by">Change Requested By</label>
-                      <input id="changeRequestedBy" type="text" class="form-control" name="change_requested_by" autofocus required>
+                      <label>Remarks <span style="font-size: 8px !important;"> (Enter any other useful information here)</span></label>
+                      <textarea class="form-control" id="remarks" name="remarks" row="3" col="3" autofocus required></textarea>
                     </div>
                   </div>
 
-
-                  <div class="form-header-label">Section B: Technician Details </div>
-                <!-- Row 6 -->
-                <div class="row">
-                    <div class="form-group col-6">
-                      <label for="technician_name">Technician's Name</label>
-                      <input id="technicianName" type="text" class="form-control" name="technician_name" autofocus required>
-                    </div>
-                    <div class="form-group col-6">
-                        <label for="technician_id">Technician's ID Number</label>
-                        <input id="technicianId" type="text" class="form-control" name="technician_id" autofocus required>
-                    </div>
-                  </div>
-
-                <!-- Row 7 -->
-                <div class="row">
-                    <div class="form-group col-6">
-                      <label for="technician_activity_details">Technician's Activity Details</label>
-                      <textarea class="form-control" id="technicianActivityDetails" name="technician_activity_details" row="3" col="3" autofocus required></textarea>
-
-                    </div>
-                    <div class="form-group col-6">
-                        <label for="remarks">Remarks</label>
-                        <textarea class="form-control" id="remarks" name="remarks" row="3" col="3" autofocus required></textarea>
-                    </div>
-                  </div>
 
                   <div class="form-group">
+                    <!-- <label for="email">User ID</label> -->
                     <input type="hidden" name="id_session" value="<?php echo $id_session; ?>" class="form-control" name="id_session">
                   </div>
 
                   <div class="form-group">
-                    <button type="submit" name="create-equipment-change-order-form" class="btn btn-primary btn-block">
+                    <button type="submit" name="create-change-order-form" class="btn btn-primary btn-block">
                       Submit Form
                     </button>
                   </div>

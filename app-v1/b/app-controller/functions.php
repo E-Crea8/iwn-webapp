@@ -143,8 +143,10 @@ function createInternetChangeOrderForm(){
             $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
 
             echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!"," Change order form for internet service created for '.$customer_name.'.","success");';
-            echo '}, 1000);</script>';
+            echo 'setTimeout(function () { swal.fire("Success!","Internet service change order form for '.$customer_name.' created successfully. Click OK to view form data","success").then( () => {
+    location.href = "change-order-record"});';
+            echo '}, 1000);
+            </script>';        
 
             // echo json_encode($doInsertCategoryName);
 
@@ -496,8 +498,10 @@ function createInternetServiceOrderForm(){
             $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
 
             echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!"," Internet service order form for internet service created for '.$f_name.'.","success");';
-            echo '}, 1000);</script>';
+            echo 'setTimeout(function () { swal.fire("Success!","Internet service order form for '.$f_name.' created successfully. Click OK to view form data","success").then( () => {
+    location.href = "ip-order-form-record"});';
+            echo '}, 1000);
+            </script>';        
 
             // echo json_encode($doInsertCategoryName);
 
@@ -830,8 +834,10 @@ function createEnterpriseServiceOrderForm(){
             $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
 
             echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!"," Enterprise order form for internet service created for '.$f_name.'.","success");';
-            echo '}, 1000);</script>';
+            echo 'setTimeout(function () { swal.fire("Success!","Enterprise internet service order form for '.$f_name.' created successfully. Click OK to view form data","success").then( () => {
+    location.href = "enterprise-order-record"});';
+            echo '}, 1000);
+            </script>';        
 
             // echo json_encode($doInsertCategoryName);
 
@@ -1167,8 +1173,10 @@ function createEquipmentLeaseForm(){
             $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
 
             echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!"," Equipment lease form created for '.$client_name.'.","success");';
-            echo '}, 1000);</script>';
+            echo 'setTimeout(function () { swal.fire("Success!","Equipment lease form for '.$client_name.' created successfully. Click OK to view form data","success").then( () => {
+    location.href = "equipment-lease-record"});';
+            echo '}, 1000);
+            </script>';        
 
             // echo json_encode($doInsertCategoryName);
 
@@ -1474,6 +1482,363 @@ function equipmentLeaseForm($form_id){
 
 }
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function to create equipment change order form
+function createEquipmentChangeOrderForm(){
+    global $dbc;
+
+        $customer_name = $_POST['customer_name'];
+        $customer_address = $_POST['customer_address'];
+        $customer_email = $_POST['customer_email'];
+        $customer_phone = $_POST['customer_phone'];
+        $equipment_removed = $_POST['equipment_removed'];
+        $equipment_replaced = $_POST['equipment_replaced'];
+        $equipment_change_date = $_POST['equipment_change_date'];
+        $equipment_change_time = $_POST['equipment_change_time'];
+        $change_requested_by = $_POST['change_requested_by'];
+        $technician_name = $_POST['technician_name'];
+        $technician_id = $_POST['technician_id'];
+        $technician_activity_details = $_POST['technician_activity_details'];
+        $remarks = $_POST['remarks'];
+        $id_session = $_POST['id_session'];
+
+        // Create Random Unique Id
+        $randomUID = md5(microtime(true).mt_Rand());
+
+        // Get username for user for the history table
+        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
+    
+        $row=mysqli_fetch_array($doGetNameQuery);
+        $getEmail = $row['email'];
+
+        // Generate date - Lagos time format
+        date_default_timezone_set("Africa/Lagos");
+
+        $date = date('M d, Y');
+        // $date = date('M d, Y', time());
+
+
+
+            // Insert into app history table
+            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new internet service change order form for $customer_name')";
+
+            $insertChangeOrderForm = "INSERT INTO equipment_change_order_form (customer_name, customer_address, customer_email, customer_phone, equipment_removed, equipment_replaced, equipment_change_date, equipment_change_time, change_requested_by, technician_name, technician_id, technician_activity_details, remarks, form_id, date_submitted) 
+            VALUES ('$customer_name', '$customer_address', '$customer_email', '$customer_phone', '$equipment_removed', '$equipment_replaced', '$equipment_change_date', '$equipment_change_time', '$change_requested_by', '$technician_name', '$technician_id', '$technician_activity_details', '$remarks', '$randomUID', '$date')";
+            $doInsertChangeOrderForm = mysqli_query($dbc, $insertChangeOrderForm);
+            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+
+            echo '<script type="text/javascript">';
+            echo 'setTimeout(function () { swal.fire("Success!","Equipment change order form for '.$customer_name.' created successfully. Click OK to view form data","success").then( () => {
+    location.href = "equipment-change-record"});';
+            echo '}, 1000);
+            </script>';        
+
+
+            // echo json_encode($doInsertCategoryName);
+
+
+        }
+
+
+// Function to manage equipment change order form
+function manageEquipmentChangeOrderForm(){
+    global $dbc;
+    $selectEquipmentChangeOrderData = "SELECT * FROM equipment_change_order_form ORDER BY id DESC";
+    $doSelectEquipmentChangeOrderData = mysqli_query($dbc, $selectEquipmentChangeOrderData);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectEquipmentChangeOrderData);
+
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+        <table id="equipmentChangeOrderData" class="table table-striped">
+        <thead style="font-size:12px;">
+            <tr>
+                <th>SN</th>
+                <th>Customer Name</th>
+                <th>Customer Address</th>
+                <th>Customer Email</th>
+                <th style="width: 20%;">Action</th>
+            </tr>
+        </thead>
+        <tfoot style="font-size:12px;">
+            <tr>
+            <th>SN</th>
+            <th>Customer Name</th>
+            <th>Customer Address</th>
+            <th>Customer Email</th>
+            <th style="width: 20%;">Action</th>
+</tr>
+        </tfoot>
+        ';
+        while($row = mysqli_fetch_array($doSelectEquipmentChangeOrderData))
+        
+        {
+            $sn++;
+            $ecId = $row["id"];
+            $customerName = $row["customer_name"];
+
+            // Create Random Unique Id
+            $randomUID = md5(microtime(true).mt_Rand());
+
+            echo '
+            <tr style="font-size:12px;">
+            <td> '.$sn.' </td>
+            <td> '.$row["customer_name"].' </td>
+            <td> '.$row["customer_address"].' </td>
+            <td> '.$row["customer_email"].' </td>
+            <td><a href="view-equipment-change-order-form?form_id='.$row["id"].'&form_ref='.$randomUID.'" target=_blank class="btn btn-sm btn-primary"><i class="ion-ios-eye"></i></a>
+            <a href="edit-equipment-change-order-form?id='.$row["id"].'" class="btn btn-sm btn-info" ><i class="ion-edit"></i></a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-danger" id="delete-equipment-change-order-form" data-id="'.$ecId.'"><i class="ion-trash-a"></i></a>
+            </td>
+            </tr>
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+
+}
+  
+
+// Function to print equipment change order form 
+function equipmentChangeOrderForm($form_id){
+    global $dbc;
+    $selectEquipmentChangeOrderRecord = "SELECT * FROM equipment_change_order_form WHERE id = '$form_id'";
+    $doSelectEquipmentChangeOrderRecord = mysqli_query($dbc, $selectEquipmentChangeOrderRecord);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectEquipmentChangeOrderRecord);
+
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+      <div class="container mt-0" id="equipmentChangeOrderForm">
+        ';
+        while($row = mysqli_fetch_array($doSelectEquipmentChangeOrderRecord))
+        
+        {
+            $sn++;
+            $changeId = $row["id"];
+            $customerName = $row["customer_name"];
+            // $currentPrice = number_format($row["current_plan_price"],2);
+
+            echo '
+            <div class="row" style=margin-bottom: 10px;">
+            <table style="width: 100%;">
+                <tr style="height: 80px; text-align: right; color: #FFFFFF; font-family: Georgia, Times New Roman, Times, serif; font-size: 11px; font-weight: 300;">
+                    <td> <img src="./../dist/img/I-World Networks Logo.fw.png" alt="I-World Networks Logo"><br>
+                    <i><span style="text-align: right; color: #9CCA48;"> The Best Fixed Wireless Broadband in Nigeria &nbsp;&nbsp;</span></i></td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 80px; text-align: center; padding: 40px 0px 40px 0px; background-color: #9CCA48; color: #FFFFFF; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 700;">
+                    <td> <h4>CHANGE ORDER FOR EQUIPMENT</h4></td>
+                </tr>
+                <tr style="height: 40px; text-align: center; text-transform: uppercase; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 600;">
+                    <td>section a: equipment replacement</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> Customer Name:</td>
+                    <td style="padding-left: 10px;">'.$row["customer_name"].'</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> Customer Address:</td>
+                    <td style="padding-left: 10px;">'.$row["customer_address"].'</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> Customer Email(s):</td>
+                    <td style="padding-left: 10px;">'.$row["customer_email"].'</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> Customer Phone(s):</td>
+                    <td style="padding-left: 10px;">'.$row["customer_phone"].'</td>
+                </tr>
+            </table>
+        </div>
+
+        
+        <div class="row" style="margin-top: 0px;">
+        <table class="table-bordered" style="width: 100%;">
+            <tr style="height: 35px; text-align: left;">
+                <td class="formField"> Equipment Removed (Type, MAC/MODEL):</td>
+                <td style="padding-left: 10px;">'.$row["equipment_removed"].'</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="row" style="margin-top: 0px;">
+    <table class="table-bordered" style="width: 100%;">
+        <tr style="height: 35px; text-align: left;">
+            <td class="formField"> Equipment Replaced (Type, MAC/MODEL):</td>
+            <td style="padding-left: 10px;">'.$row["equipment_replaced"].'</td>
+        </tr>
+    </table>
+</div>
+
+<div class="row" style="margin-top: 0px;">
+<table class="table-bordered" style="width: 100%;">
+    <tr style="height: 35px; text-align: left;">
+        <td class="formField"> Date of Equipment Change:</td>
+        <td style="padding-left: 10px;">'.$row["equipment_change_date"].'</td>
+    </tr>
+</table>
+</div>
+
+<div class="row" style="margin-top: 0px;">
+<table class="table-bordered" style="width: 100%;">
+    <tr style="height: 35px; text-align: left;">
+        <td class="formField"> Time of Equipment Change:</td>
+        <td style="padding-left: 10px;">'.$row["equipment_change_time"].'</td>
+    </tr>
+</table>
+</div>
+
+<div class="row" style="margin-top: 0px;">
+<table class="table-bordered" style="width: 100%;">
+    <tr style="height: 35px; text-align: left;">
+        <td class="formField"> Change requested by:</td>
+        <td style="padding-left: 10px;">'.$row["change_requested_by"].'</td>
+    </tr>
+</table>
+</div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 40px; text-align: center; text-transform: uppercase; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 600;">
+                    <td>section b: account technician&#39;s details</td>
+                </tr>
+            </table>
+        </div>
+        
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> Technician’s Name:</td>
+                    <td style="padding-left: 10px;">'.$row["technician_name"].'</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> Technician’s ID Number:</td>
+                    <td style="padding-left: 10px;">'.$row["technician_id"].'</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> Technician’s Activity Details:</td>
+                    <td style="padding-left: 10px;">'.$row["technician_activity_details"].'</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row" style="margin-top: 0px; margin-bottom: 30px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 50px; text-align: center;">
+                    <td style="padding-left: 10px; text-align: left; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 600;"> Remarks: <span style="padding-left: 1px; font-weight: normal;">'.$row["remarks"].'</span></td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px; margin-bottom: 20px;">
+            <table style="width: 100%;">
+                <tr style="height: 60px; text-align: center;">
+                    <td style="text-align: center; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 400;"> ------------------------------------------------------<br>
+                        <span style="text-align: center;">Customer Signature and Date</span></td>
+                    <td style="text-align: center; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 400;"> ------------------------------------------------------<br>
+                    <span style="text-align: center;">I-World Representative Signature and Date</span></td>
+                </tr>
+            </table>
+        </div>
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+    // Create dataTable here
+
+}
 
 
 

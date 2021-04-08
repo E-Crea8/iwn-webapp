@@ -23,31 +23,35 @@
 
 
 
-            <li class="menu-header">IAS & Support Forms</li>
+              <!-- IAS Form Section -->
 
-            <li>
-                          <a href="#" class="has-dropdown"><i class="ion ion-wrench"></i><span>Installation Form</span></a>
-                          <ul class="menu-dropdown">
-                          <li><a href="installation-completion-form"><i class="ion ion-android-radio-button-on"></i>Installation Completion Certification Form</a></li>
-                          <li><a href="installation-completion-record"><i class="ion ion-android-radio-button-on"></i> Manage Record</a></li>
-                          </ul>
-            </li>
+              <li class="menu-header">IAS & Support Forms</li>
 
-            <!-- IAS Menu Categories -->
-            <li>
-                          <a href="#" class="has-dropdown"><i class="ion ion-ios-home"></i><span>Site Survey Form</span></a>
-                          <ul class="menu-dropdown">
-                          <li><a href="site-survey-customer-details"><i class="ion ion-android-radio-button-on"></i> Customer Details</a></li>
-                          <li><a href="site-survey-media-upload"><i class="ion ion-android-radio-button-on"></i> Media Uploads</a></li>
-                          <li><a href="site-survey-record"><i class="ion ion-android-radio-button-on"></i> Manage Records</a></li>
-                          </ul>
-                        </li>
-            <li>
+<li>
+<a href="#" class="has-dropdown"><i class="ion ion-ios-home"></i><span>Site Survey Form</span></a>
+<ul class="menu-dropdown">
+<li><a href="site-survey-customer-details"><i class="ion ion-android-radio-button-on"></i> Customer Details</a></li>
+<li><a href="site-survey-media-upload"><i class="ion ion-android-radio-button-on"></i> Media Uploads</a></li>
+<li><a href="site-survey-record"><i class="ion ion-android-radio-button-on"></i> Manage Records</a></li>
+</ul>
+</li>
+
+<li>
+<a href="#" class="has-dropdown"><i class="ion ion-wrench"></i><span>Installation Form</span></a>
+<ul class="menu-dropdown">
+<li><a href="installation-completion-form"><i class="ion ion-android-radio-button-on"></i>Installation Completion Certification Form</a></li>
+<li><a href="installation-completion-record"><i class="ion ion-android-radio-button-on"></i> Manage Record</a></li>
+</ul>
+</li>
 
 
-
-            
-
+<li>
+<a href="#" class="has-dropdown"><i class="ion ion-settings"></i><span>Work Order</span></a>
+<ul class="menu-dropdown">
+<li><a href="work-order-form"><i class="ion ion-android-radio-button-on"></i> Work Order Form</a></li>
+<li><a href="work-order-record"><i class="ion ion-android-radio-button-on"></i> Manage Record</a></li>
+</ul>
+</li>
 
             <li>
               <a href="#" id="sidebarLogout"><i class="ion ion-log-out"></i> Logout</a>

@@ -1,5 +1,16 @@
 <?php
- include ('./app-controller/functions.php');
+// Functions
+include ('./app-controller/functions.php');
+
+// Connect to User Table in DB
+$user_query = "SELECT * FROM users WHERE user_id='$id_session'";
+$sqlQuery = mysqli_query($dbc, $user_query);
+
+$row=mysqli_fetch_array($sqlQuery);
+$userId = $row['user_id'];
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +21,7 @@
   <!-- Shortcut Icon -->
   <link rel="shortcut icon" href="../../dist/img/favicon.fw.png">
 
-  <title>IWN App - Equipment Change Order Form</title>
+  <title>IWN App - User Profile</title>
 
   <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/modules/ionicons/css/ionicons.min.css">
@@ -72,115 +83,81 @@
       <div class="main-content">
         <section class="section">
           <h1 class="section-header">
-            <div>Create Change Order Form For Equipment</div>
+            <div>Manage Your Profile</div>
           </h1>
           <div class="section-body">
             <div class="card">
               <div class="card-body">
+                <!-- <div class="alert alert-info mb-0">
+                  We use 'Toastr' made by @CodeSeven. You can check the full documentation <a href="http://www.toastrjs.com/">here</a>.
+                </div> -->
                 <?php
-                if(isset($_POST['create-equipment-change-order-form'])){
-                    createEquipmentChangeOrderForm(); //here goes the function call
+                if(isset($_POST['update-profile'])){
+                  updateUserProfile(); //here goes the function call
                }
                ?>
 
 
-                <form name="create-equipment-change-order-form" method="POST">
+                <form name="update-user-profile" method="POST">
 
-                <div class="form-header-label">Section A: Equipment Replacement</div>
+                <!-- <div class="form-header-label">Section A: Equipment Replacement</div> -->
                 <!-- Row 1 -->
                 <div class="row">
                     <div class="form-group col-6">
-                      <label for="customer_name">Customer Name</label>
-                      <input id="customerName" type="text" class="form-control" name="customer_name" autofocus required>
+                      <label for="firstname">Firstame</label>
+                      <input id="firstame" type="text" value="<?php echo $row['firstname']; ?>" class="form-control" name="firstname" autofocus required>
                     </div>
                     <div class="form-group col-6">
-                    <label for="customer_address">Customer Address</label>
-                    <textarea class="form-control" id="customerAddress" name="customer_address" row="3" col="3" autofocus required></textarea>
+                    <label for="lastname">Lastname</label>
+                    <input class="form-control" id="lastname" value="<?php echo $row['lastname']; ?>" name="lastname" type="text" autofocus required>
                     </div>
                   </div>
 
                 <!-- Row 2 -->
                 <div class="row">
                     <div class="form-group col-6">
-                    <label for="customer_email">Customer Email(s)</label>
-                      <input id="customerEmail" type="email" class="form-control" name="customer_email" autofocus required>
+                    <label for="email">Email</label>
+                      <input id="email" type="email" class="form-control" value="<?php echo $row['email']; ?>" name="email" autofocus required>
                     </div>
                     <div class="form-group col-6">
-                      <label for="customer_phone">Customer Phone(s)</label>
-                      <input id="customerPhone" type="text" class="form-control" name="customer_phone" autofocus required>
+                      <label for="password">Password<span style="font-size: 8px;"> (You can set a new password here)</span></label>
+                      <input id="password" type="password" class="form-control" value="<?php echo $row['normal_password']; ?>" name="password" autofocus required>
                     </div>
                   </div>
 
 
                 <!-- Row 3 -->
                 <div class="row">
-                    <div class="form-group col-6">
-                    <label for="equipment_removed">Equipment Removed (Type, MAC/MODEL)</label>
-                      <input id="equipmentRemoved" type="text" class="form-control" name="equipment_removed" autofocus required>
-                    </div>
-                    <div class="form-group col-6">
-                    <label for="equipment_replaced">Equipment Replaced (Type, MAC/MODEL)</label>
-                      <input id="equipmentReplaced" type="text" class="form-control" name="equipment_replaced" autofocus required>
-                    </div>
-                  </div>
-
-
-                <!-- Row 4 -->
-                <div class="row">
-                    <div class="form-group col-6">
-                    <label for="equipment_change_date">Date of Equipment Change</label>
-                      <input id="equipmentChangeDate" type="date" class="form-control" name="equipment_change_date" autofocus required>
-                    </div>
-                    <div class="form-group col-6">
-                    <label for="equipment_change_time">Time of Equipment Change</label>
-                      <input id="equipmentChangeTime" type="time" class="form-control" name="equipment_change_time" autofocus required>
-                    </div>
-                  </div>
-
-                <!-- Row 5 -->
-                <div class="row">
                     <div class="form-group col-12">
-                    <label for="change_requested_by">Change Requested By</label>
-                      <input id="changeRequestedBy" type="text" class="form-control" name="change_requested_by" autofocus required>
+                    <label for="position">Position</label>
+                      <input id="position" type="position" class="form-control" value="<?php echo $row['position']; ?>" name="position" autofocus required readonly>
                     </div>
                   </div>
 
-
-                  <div class="form-header-label">Section B: Technician Details </div>
-                <!-- Row 6 -->
-                <div class="row">
+                  <!-- <div class="form-header-label">Section B: Account Manager's Details </div> -->
+                <!-- Row 3 -->
+                <!-- <div class="row">
                     <div class="form-group col-6">
-                      <label for="technician_name">Technician's Name</label>
-                      <input id="technicianName" type="text" class="form-control" name="technician_name" autofocus required>
+                      <label for="acct_mgr_name">Account Manager's Name</label>
+                      <input id="acctMgrName" type="text" class="form-control" name="acct_mgr_name" autofocus required>
                     </div>
                     <div class="form-group col-6">
-                        <label for="technician_id">Technician's ID Number</label>
-                        <input id="technicianId" type="text" class="form-control" name="technician_id" autofocus required>
+                        <label for="acct_mgr_email">Account Manager's Email</label>
+                        <input id="acctMgrEmail" type="email" class="form-control" name="acct_mgr_email" autofocus required>
                     </div>
-                  </div>
-
-                <!-- Row 7 -->
-                <div class="row">
-                    <div class="form-group col-6">
-                      <label for="technician_activity_details">Technician's Activity Details</label>
-                      <textarea class="form-control" id="technicianActivityDetails" name="technician_activity_details" row="3" col="3" autofocus required></textarea>
-
-                    </div>
-                    <div class="form-group col-6">
-                        <label for="remarks">Remarks</label>
-                        <textarea class="form-control" id="remarks" name="remarks" row="3" col="3" autofocus required></textarea>
-                    </div>
-                  </div>
+                  </div> -->
 
                   <div class="form-group">
+                    <!-- <label for="email">User ID</label> -->
                     <input type="hidden" name="id_session" value="<?php echo $id_session; ?>" class="form-control" name="id_session">
                   </div>
 
                   <div class="form-group">
-                    <button type="submit" name="create-equipment-change-order-form" class="btn btn-primary btn-block">
-                      Submit Form
+                    <button type="submit" name="update-profile" class="btn btn-primary btn-block">
+                      Update Profile
                     </button>
                   </div>
+
                 </form>
                 
               </div>
