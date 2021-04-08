@@ -2508,7 +2508,432 @@ function createEquipmentChangeOrderForm(){
 
         }
 
-////////////////////////////////////// OTHER APP FUNCTIONS ///////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function to create installation completion form
+function createInstallationCompletionForm(){
+    global $dbc;
+
+        $customer_name = $_POST['customer_name'];
+        $customer_address = $_POST['customer_address'];
+        $customer_sub_details = $_POST['customer_sub_details'];
+        $station_radio_type = $_POST['station_radio_type'];
+        $router_type = $_POST['router_type'];
+        $installation_type = $_POST['installation_type'];
+        $surge_protector_available = $_POST['surge_protector_available'];
+        $power_backup_available = $_POST['power_backup_available'];
+        $associated_ap = $_POST['associated_ap'];
+        $signal_level = $_POST['signal_level'];
+        $link_ccq = $_POST['link_ccq'];
+        $tx = $_POST['tx'];
+        $rx = $_POST['rx'];
+        $downlink = $_POST['downlink'];
+        $uplink = $_POST['uplink'];
+        $lan_speed = $_POST['lan_speed'];
+        $customer_portal_activation_status = $_POST['customer_portal_activation_status'];
+        $customer_training_status = $_POST['customer_training_status'];
+        $app_mgt_status = $_POST['app_mgt_status'];
+        $password_change_status = $_POST['password_change_status'];
+        $downlink = $_POST['downlink'];
+
+        $id_session = $_POST['id_session'];
+
+        // Create Random Unique Id
+        $randomUID = md5(microtime(true).mt_Rand());
+
+        // Get username for user for the history table
+        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
+    
+        $row=mysqli_fetch_array($doGetNameQuery);
+        $getEmail = $row['email'];
+
+        // Check if customer record existed in table
+
+        // Generate date - Lagos time format
+        date_default_timezone_set("Africa/Lagos");
+
+        $date = date('M d, Y');
+        // $date = date('M d, Y', time());
+        
+
+
+
+            // Insert into app history table
+            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new installation completion form for $customer_name')";
+
+            $insertInstallationCompletionForm = "INSERT INTO installation_completion_form (customer_name, customer_address, customer_sub_details, station_radio_type, router_type, installation_type, surge_protector_available, power_backup_available, associated_ap, signal_level, link_ccq, tx, rx, downlink, uplink, lan_speed, customer_portal_activation_status, customer_training_status, app_mgt_status, password_change_status, form_id, date_submitted) 
+            VALUES ('$customer_name', '$customer_address', '$customer_sub_details', '$station_radio_type', '$router_type', '$installation_type', '$surge_protector_available', '$power_backup_available', '$associated_ap', '$signal_level', '$link_ccq', '$tx', '$rx', '$downlink', '$uplink', '$lan_speed', '$customer_portal_activation_status', '$customer_training_status', '$app_mgt_status', '$password_change_status', '$randomUID', '$date')";
+            $doInstallationCompletionForm = mysqli_query($dbc, $insertInstallationCompletionForm);
+            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+
+            // echo '<script type="text/javascript">';
+            // echo 'setTimeout(function () { swal.fire("Success!"," Work order form for internet service created for '.$title.' '.$pm_name.'.","success");';
+            // echo '}, 1000);</script>';
+
+            echo '<script type="text/javascript">';
+            echo 'setTimeout(function () { swal.fire("Success!","Installation completion certification form for '.$customer_name.' created successfully. Click OK to view form data","success").then( () => {
+    location.href = "installation-completion-record"});';
+            echo '}, 1000);
+            </script>';        
+    
+            // echo json_encode($doWorkOrderForm);
+
+
+        }
+
+
+// Function to manage installation completion form
+function manageInstallationCompletionForm(){
+    global $dbc;
+    $selectInstallationCompletionData = "SELECT * FROM installation_completion_form ORDER BY id DESC";
+    $doSelectInstallationCompletionData = mysqli_query($dbc, $selectInstallationCompletionData);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectInstallationCompletionData);
+
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+        <table id="installationCompletionData" class="table table-striped">
+        <thead style="font-size:12px;">
+            <tr>
+                <th>SN</th>
+                <th>Customer Name</th>
+                <th>Customer Address</th>
+                <th>LAN Speed</th>
+                <th style="width: 20%;">Action</th>
+            </tr>
+        </thead>
+        <tfoot style="font-size:12px;">
+            <tr>
+            <th>SN</th>
+            <th>Customer Name</th>
+            <th>Customer Address</th>
+            <th>LAN Speed</th>
+        <th style="width: 20%;">Action</th>
+</tr>
+        </tfoot>
+        ';
+        while($row = mysqli_fetch_array($doSelectInstallationCompletionData))
+        
+        {
+            $sn++;
+            $iId = $row["id"];
+            $customerName = $row["customer_name"];
+
+            // Create Random Unique Id
+            $randomUID = md5(microtime(true).mt_Rand());
+
+            echo '
+            <tr style="font-size:12px;">
+            <td> '.$sn.' </td>
+            <td> '.$row["customer_name"].' </td>
+            <td> '.$row["customer_address"].' </td>
+            <td> '.$row["lan_speed"].' </td>
+            <td><a href="view-installation-completion-form?form_id='.$row["id"].'&form_ref='.$randomUID.'" target=_blank class="btn btn-sm btn-primary"><i class="ion-ios-eye"></i></a>
+            <a href="edit-installation-completion-form?id='.$row["id"].'" class="btn btn-sm btn-info" ><i class="ion-edit"></i></a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-danger" id="delete-installation-completion-form" data-id="'.$iId.'"><i class="ion-trash-a"></i></a>
+            </td>
+            </tr>
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+
+}
+
+
+// Function to view installation completion form
+function installationCompletionForm($form_id){
+    global $dbc;
+    $selectInstallationCompletionFormRecord = "SELECT * FROM installation_completion_form WHERE id = '$form_id'";
+    $doSelectInstallationCompletionFormRecord = mysqli_query($dbc, $selectInstallationCompletionFormRecord);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectInstallationCompletionFormRecord);
+
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+      <div class="container mt-0" id="installationCompletionForm">
+        ';
+        while($row = mysqli_fetch_array($doSelectInstallationCompletionFormRecord))
+        
+        {
+            $sn++;
+            $iId = $row["id"];
+            $customerName = $row["customer_name"];
+
+            echo '
+            <div class="row" style=margin-bottom: 10px;">
+            <table style="width: 100%;">
+                <tr style="height: 80px; text-align: right; color: #FFFFFF; font-family: Georgia, Times New Roman, Times, serif; font-size: 11px; font-weight: 300;">
+                    <td> <img src="./../dist/img/IP-Order-Form-I-World-Networks-Logo.fw.png" alt="I-World Networks Logo"></td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 40px; text-align: center; padding: 30px 0px 20px 0px; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 700;">
+                    <td> <h4>Installation Completion Certification Form</h4></td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                <td class="formField" style=" width: 10%;"> Customer Name</td>
+                <td class="formField" width="80%">'.$row["customer_name"].'</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField" style=" width: 10%;"> Address</td>
+            <td class="formField"> '.$row["customer_address"].'</td>
+        </tr>
+        </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField" style=" width: 10%;"> Customer Subscription Details</td>
+                    <td class="formField"> '.$row["customer_sub_details"].'</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField" style=" width: 20%;"> Equipment Details</td>
+                    <td class="formField"> Type of Station Radio with MAC :- '.$row["station_radio_type"].'</td>
+                    <td class="formField"> Type of Router with MAC :- '.$row["router_type"].'</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField" style=" width: 10%;"> Type of Installation</td>
+                    <td class="formField"> '.$row["installation_type"].'</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField" style=" width: 20%;"> Power Status</td>
+                    <td class="formField"> Type of Surge Protector Available Onsite :- '.$row["surge_protector_available"].'</td>
+                    <td class="formField"> Type of Power Backup Available Onsite :- '.$row["power_backup_available"].'</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField" style=" width: 20%;"> Installation Baseline Parameter</td>
+                    <td class="formField" style=" width: 10%;"> Associated AP :- '.$row["associated_ap"].'</td>
+                    <td class="formField" style=" width: 10%;"> Signal Level :- '.$row["signal_level"].'</td>
+                    <td class="formField" style=" width: 10%;"> Link CCQ :- '.$row["link_ccq"].'</td>
+                    <td class="formField" style=" width: 15%; text-align: left;">
+                        <div >
+                            <table class="table-bordered" style=" width: 100%;">
+                                <tr style="height: 35px; text-align: left; colspan="2">
+                                    <td colspan="2"> Radio Capacity</td>
+                                </tr>
+                                <tr style="height: 35px; text-align: left;">
+                                    <td>TX:- '.$row["tx"].'</td>
+                                    <td>RX:- '.$row["rx"].'</td>
+                                </tr>
+                            </table>
+                        </div> 
+                    </td>
+                    <td class="formField" style=" width: 15%;">
+                        <div >
+                            <table class="table-bordered">
+                                <tr style="height: 35px; text-align: left; colspan="2">
+                                    <td colspan="2"> Speed Test</td>
+                                </tr>
+                                <tr style="height: 35px; text-align: left;">
+                                    <td>Downlink:- '.$row["downlink"].'</td>
+                                    <td>Uplink:- '.$row["uplink"].'</td>
+                                </tr>
+                            </table>
+                        </div> 
+                    </td>
+                    <td class="formField" style=" width: 15%;">
+                    <div >
+                    <table class="table-bordered" style=" width: 100%;">
+                        <tr style="height: 35px; text-align: left;">
+                            <td> LAN Speed</td>
+                        </tr>
+                        <tr style="height: 35px; text-align: left;">
+                            <td>'.$row["lan_speed"].'</td>
+                        </tr>
+                    </table>
+                </div> 
+            </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="row" style="margin-top: 0px;">
+            <table class="table-bordered" style="width: 100%;">
+                <tr style="height: 35px; text-align: left;">
+                    <td class="formField"> <h5>User Onboarding Process Checklist:</h5></td>
+                    
+                </tr>
+            </table>
+        </div>
+
+        <div class="row" style="margin-top: 0px;">
+        <table class="table-bordered" style="width: 100%;">
+            <tr style="height: 35px; text-align: left;">
+                <td class="formField"><span style="font-weight: 700; font-size: 18px;">o</span> Is customer account portal activated? <span style="border: 2px solid #DFDFDF; padding: 5px;">'.$row["customer_portal_activation_status"].'</span></td>
+                
+            </tr>
+            <tr style="height: 35px; text-align: left;">
+            <td class="formField"> <span style="font-weight: 700; font-size: 18px;">o</span> Has the customer been enlightened on how to make use of the account portal to pay invoice, check his usage, send email for support request, etc.? <span style="border: 2px solid #DFDFDF; padding: 5px;">'.$row["customer_training_status"].'</span></td>
+            
+        </tr>
+        <tr style="height: 35px; text-align: left;">
+        <td class="formField"> <span style="font-weight: 700; font-size: 18px;">o</span> Is the wireless app management of the router installed for customer? <span style="border: 2px solid #DFDFDF; padding: 5px;">'.$row["app_mgt_status"].'</span></td>
+        
+    </tr>
+    <tr style="height: 35px; text-align: left;">
+        <td class="formField"> <span style="font-weight: 700; font-size: 18px;">o</span> Can the customer change his/her wireless password? <span style="border: 2px solid #DFDFDF; padding: 5px;">'.$row["password_change_status"].'</span></span></td>
+        
+    </tr>
+        </table>
+    </div>
+
+<div class="row" style="margin-top: 0px;">
+<table class="table-bordered" style="width: 100%;">
+    <tr style="height: 35px; text-align: left;">
+        <td > 
+        <h5 style="padding-left: 10px;">User Precautionary Tips Of Getting The Best Out Of Your Internet</h5>
+        <span style="font-size: 12px !important;font-weight: 500;">
+        <ul >
+        <li>
+        Your wireless password is like the key to your home. Always protect it and its advisable you change it often.
+        </li>
+        <li>
+        When using your internet for streaming ensure no other heavy activity like downloading is done on the internet for you to get the best of streaming experience.
+        </li>
+        <li>
+        Always ensure your computer is connected with the LAN cable during live streaming and ensure you restrict other internet users during your live streaming session.
+        </li>
+        <li>
+        Are you using your Internet for business? Be in charge of your internet by effective management of all your users. Assign independent login and Bandwidth to each user. Request for a bandwidth management device to enjoy this feature.
+        </li>
+        <li>
+        Are you using your Internet for business? Be in charge of your internet by effective management of all your users. Assign independent login and Bandwidth to each user. Request for a bandwidth management device to enjoy this feature.
+        </li>
+        </ul>
+        </span>
+
+        
+        
+        </td>
+    </tr>
+</table>
+</div>
+
+<div class="row" style="margin-top: 0px;">
+<table class="table-bordered" style="width: 100%;">
+    <tr style="height: 35px; text-align: left;">
+        <td class="formField"> This is to certify that the installation has been done and completed and all information herein are correctly captured.<br>
+        I hereby confirm that the internet meets my expectation and my internet need.</td>
+        
+    </tr>
+</table>
+</div>
+
+<div class="row" style="margin-top: 40px; margin-bottom: 10px;">
+<table style="width: 100%;">
+    <tr style="height: 50px; text-align: center;">
+        <td style="text-align: center; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 400;"> ------------------------------------------------------<br>
+            <span style="text-align: center;">Customer Signature | Date</span></td>
+        <td style="text-align: center; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 400;"> ------------------------------------------------------<br>
+        <span style="text-align: center;">Installer Signature | Date</span></td>
+    </tr>
+</table>
+</div>
+
+        
+        <div style="margin-bottom: 30px;"></div>
+        </table>
+        </div>
+
+
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+    // Create dataTable here
+
+}
+
+
+////////////////////////////////////// OTHER APP FUNCTIONS //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Function to update user profile
 function updateUserProfile(){
     global $dbc;

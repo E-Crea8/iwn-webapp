@@ -23,7 +23,15 @@
 
 
 
-            <li class="menu-header">IAS Forms</li>
+            <li class="menu-header">IAS & Support Forms</li>
+
+            <li>
+                          <a href="#" class="has-dropdown"><i class="ion ion-wrench"></i><span>Installation Form</span></a>
+                          <ul class="menu-dropdown">
+                          <li><a href="installation-completion-form"><i class="ion ion-android-radio-button-on"></i>Installation Completion Certification Form</a></li>
+                          <li><a href="installation-completion-record"><i class="ion ion-android-radio-button-on"></i> Manage Record</a></li>
+                          </ul>
+            </li>
 
             <!-- IAS Menu Categories -->
             <li>
@@ -43,6 +51,7 @@
 
             <li>
               <a href="#" id="sidebarLogout"><i class="ion ion-log-out"></i> Logout</a>
-            </li>          </ul>
+            </li> 
+            </ul>
         </aside>
       </div>

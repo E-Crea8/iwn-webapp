@@ -20,7 +20,11 @@
   <link rel="stylesheet" href="../dist/css/demo.css">
   <link rel="stylesheet" href="../dist/css/style.css">
   <link rel="stylesheet" href="../assets/sweetalert/css/sweetalert2.min.css">
-/
+<!-- Data Tables -->
+<link rel="stylesheet" href="../modules/datatables/datatables.min.css">
+
+<script src="../modules/datatables/datatables.min.js"></script>
+
 </head>
 
 <body>
@@ -135,19 +139,114 @@
               </div>
             </div> 
 
-<!-- Create short link to user regsitration form -->
-            <div style="border-radius: 2px; padding-left: 15px; width: 100%;"><h4 class="section-header">Customer Form Shortlinks</h4></div>
-            <div style="background-color: #FFFFFF; width: 100%;  margin-left: 15px; padding: 25px 15px;">
-            <div style="font-weight: 500; margin-bottom: 30px;">Internet Service Order Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3bSXGWm </span></div>
-            
-            <div style="font-weight: 500; margin-top: 30px;">Enterprise Internet Service Order Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3f7VdLf </span></div>
-            
-            <div style="font-weight: 500; margin-top: 30px;">Internet Service Change Order Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/2NJg9MR </span></div>
 
-            <div style="font-weight: 500; margin-top: 30px;">Equipment Lease Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3bcHHUf </span></div>
-
-            <div style="font-weight: 500; margin-top: 30px;">Equipment Retrieval Form - <span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> Coming Soon! </span></div>
+              
           </div>
+
+          <div class="row">
+            <div class="col-lg-5 col-md-12 col-12 col-sm-12">
+              <form method="post" class="needs-validation" novalidate="">
+                <div class="card">
+                  <div class="card-header">
+                    <h4>Customer Form Short-links</h4>
+                  </div>
+                  <div class="card-body">
+                    <!-- <div class="form-group">
+                      <label>Title</label>
+                      <input type="text" name="title" class="form-control" required>
+                      <div class="invalid-feedback">
+                        Please fill in the title
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>Content</label>
+                      <textarea class="summernote-simple"></textarea>
+                    </div> -->
+                    <div style="font-weight: 500;">Internet Service Order Form - <div style="margin-top: 10px;"><span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3bSXGWm </span></div></div>
+                    <div style="font-weight: 500; margin-top: 20px;">Enterprise Internet Service Order Form - <div style="margin-top: 10px;"><span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3f7VdLf </span></div></div>          
+                    <div style="font-weight: 500; margin-top: 20px;">Internet Service Change Order Form - <div style="margin-top: 10px;"><span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/2NJg9MR </span></div></div> 
+                    <div style="font-weight: 500; margin-top: 20px;">Equipment Lease Form -  - <div style="margin-top: 10px;"><span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> https://bit.ly/3bcHHUf </span></div></div> 
+                    <div style="font-weight: 500; margin-top: 20px;">Equipment Retrieval Form -  <div style="margin-top: 10px;"><span style="background-color: #F7F7F7; padding: 10px; border-radius: 4px; padding: 8px; border: #F58634 1px solid; font-weight: normal;"> Coming Soon! </span></div></div> 
+                </div>
+            </div>
+              </form>
+            </div>
+            <div class="col-lg-7 col-md-12 col-12 col-sm-12">
+              <div class="card">
+                <div class="card-header">
+                  <!-- <div class="float-right">
+                    <a href="#" class="btn btn-primary">View All</a>
+                  </div> -->
+                  <h4>BTS Coordinates</h4>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped" id="btsCoordinatesData">
+                    <thead>
+                        <tr>
+                          <th>BTS Location</th>
+                          <th>Latitude</th>
+                          <th>Longtitude</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>BTS Location</th>
+                          <th>Latitude</th>
+                          <th>Longtitude</th>
+                        </tr>
+                      </tfoot>
+                      <tbody>                         
+                        <tr>
+                          <td>
+                          IVD
+                          </td>
+                          <td>
+                          7.12832
+                          </td>
+                          <td>
+                          3.37434
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            OGBC
+                          </td>
+                          <td>
+                          7.12587
+                          </td>
+                          <td>
+                          3.33582
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                          UPRIGHT
+                          </td>
+                          <td>
+                          7.134517
+                          </td>
+                          <td>
+                          3.319667
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                          ROCKCITY
+                          </td>
+                          <td>
+                          7.17803
+                          </td>
+                          <td>
+                          3.38317
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </div>
@@ -179,8 +278,10 @@
 
   <script src="../dist/js/scripts.js"></script>
   <script src="../dist/js/custom.js"></script>
-  <!-- <script src="../dist/js/demo.js"></script> -->
 
+<!-- Data Table JS -->
+<script src="../modules/datatables/datatables.min.js"></script>
+  
 <!--Logout Sweet Alert -->
 <script type="text/javascript">
         $(document).ready(function(){
@@ -236,6 +337,15 @@
             });
         });
     </script>
+
+
+
+<!-- Data Table Script -->
+    <script>  
+ $(document).ready(function(){  
+      $('#btsCoordinatesData').DataTable();  
+ });  
+ </script>  
 
 </body>
 </html>

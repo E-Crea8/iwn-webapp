@@ -70,7 +70,7 @@
 
               <!-- IAS Form Section -->
 
-                          <li class="menu-header">IAS Forms</li>
+                          <li class="menu-header">IAS & Support Forms</li>
 
                           <li>
                           <a href="#" class="has-dropdown"><i class="ion ion-ios-home"></i><span>Site Survey Form</span></a>
@@ -86,7 +86,6 @@
                           <ul class="menu-dropdown">
                           <li><a href="installation-completion-form"><i class="ion ion-android-radio-button-on"></i>Installation Completion Certification Form</a></li>
                           <li><a href="installation-completion-record"><i class="ion ion-android-radio-button-on"></i> Manage Record</a></li>
-                          <!-- <li><a href="site-survey-record"><i class="ion ion-android-radio-button-on"></i> Manage Records</a></li> -->
                           </ul>
                         </li>
 
@@ -96,18 +95,13 @@
                           <ul class="menu-dropdown">
                           <li><a href="work-order-form"><i class="ion ion-android-radio-button-on"></i> Work Order Form</a></li>
                           <li><a href="work-order-record"><i class="ion ion-android-radio-button-on"></i> Manage Record</a></li>
-                          <!-- <li><a href="site-survey-record"><i class="ion ion-android-radio-button-on"></i> Manage Records</a></li> -->
                           </ul>
                         </li>
 
 
             <li>
               <a href="#" id="sidebarLogout"><i class="ion ion-log-out"></i> Logout</a>
-            </li>          </ul>
-          <!-- <div class="p-3 mt-4 mb-4">
-            <a href="http://stisla.multinity.com/" class="btn btn-danger btn-shadow btn-round has-icon has-icon-nofloat btn-block">
-              <i class="ion ion-help-buoy"></i> <div>Go PRO!</div>
-            </a>
-          </div> -->
-        </aside>
-      </div>
+            </li>          
+        </ul>
+    </aside>
+  </div>
