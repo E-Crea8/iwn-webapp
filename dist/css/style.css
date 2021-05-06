@@ -2363,4 +2363,6 @@ table tr:hover .table-links {
 	margin-bottom: 10px;
 }
 
-.
+.card.card-success {
+	border-top: 2px solid #F58634;
+}

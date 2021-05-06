@@ -1,12 +1,27 @@
 <?php
- include ('./controllers/loginAuth.php');
+//  include ('./controllers/loginAuth.php');
 
 
 //  Get all payment details from URL here
-$accountName = $_GET['accountName'];
+$customerAccountName = $_GET['accountName'];
 $invoiceNumber = $_GET['invoiceNumber'];
 $email = $_GET['email'];
 $amount = $_GET['amount'];
+
+// Add form values into Sessions
+// if(empty($accountName) || empty($invoiceNumber) || empty($email) || empty($amount)){
+//     header("Location: pay");
+//     }else{
+     session_start();
+    $_SESSION['customer_account_name'] =  $customerAccountName;
+    $_SESSION['invoice_number'] =  $invoiceNumber;
+    $_SESSION['email']  = $email;
+    $_SESSION['amount']  = $amount;
+    
+    //echo $first_name;
+    //echo $email;
+    
+    // }
 
 ?>
 
@@ -18,7 +33,7 @@ $amount = $_GET['amount'];
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"
         name="viewport">
     <link rel="shortcut icon" href="./dist/img/favicon.fw.png">
-    <title>I-World Networks Online Payment</title>
+    <title>I-World Networks - Online Payment</title>
 
     <link rel="stylesheet" href="./dist/modules/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="./dist/modules/ionicons/css/ionicons.min.css">
@@ -28,6 +43,8 @@ $amount = $_GET['amount'];
     <link rel="stylesheet" href="./dist/css/style.css">
 
     <link rel="stylesheet" href="./assets/sweetalert/css/sweetalert2.min.css">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+
 </head>
 
 <body>
@@ -47,12 +64,13 @@ $amount = $_GET['amount'];
                             </div>
 
                             <div class="card-body">
-                                <form method="POST" id="loginForm" action="" class="needs-validation" novalidate="">
+                                <form method="POST" id="paymentForm" action="" class="needs-validation" novalidate="">
                                     <div class="form-group">
                                         <label for="email"> Customer Account Name</label>
                                         <input id="customerAccountName" type="text" class="form-control"
                                             name="customer_account_name" tabindex="1"
-                                            value="<?php echo $accountName; ?>" readonly="readonly" required autofocus>
+                                            value="<?php echo $customerAccountName; ?>" readonly="readonly" required
+                                            autofocus>
                                     </div>
 
                                     <div class=" form-group">
@@ -76,8 +94,9 @@ $amount = $_GET['amount'];
 
 
                                     <div class="form-group">
-                                        <button type="submit" id="login" name="login" class="btn btn-primary btn-block"
-                                            tabindex="4" style="background-color: #729635 !important;">
+                                        <button type="button" id="login" name="pay" class="btn btn-primary btn-block"
+                                            tabindex="4" style="background-color: #729635 !important;"
+                                            onclick="payWithPaystack()">
                                             Pay Now
                                         </button>
                                     </div>
@@ -95,6 +114,58 @@ $amount = $_GET['amount'];
             </div>
         </section>
     </div>
+
+    <!-- Paystack Payments Script -->
+    <script>
+    function payWithPaystack() {
+        const api = "pk_test_fa2df4ca7fea60ef6a625543478dbfabf3c5b508";
+        var handler = PaystackPop.setup({
+            key: api,
+            email: "<?php echo $email; ?>",
+            amount: <?php echo $amount*100; ?>,
+            currency: "NGN",
+            // ref: '' + Math.floor((Math.random() * 1000000000) +
+            //     1
+            // ), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+            customerAccountName: "<?php echo". $customerAccountName."; ?>",
+            invoiceNumber: "<?php echo $invoiceNumber; ?>",
+            email: "<?php echo $email; ?>",
+            // label: "Optional string that replaces customer email"
+            metadata: {
+                custom_fields: [{
+                        display_name: "Customer Account Name:",
+                        variable_name: "customer_account_name",
+                        value: "<?php echo $customerAccountName; ?>"
+                    },
+                    {
+                        display_name: "Invoice Number:",
+                        variable_name: "invoice_number",
+                        value: "<?php echo $invoiceNumber; ?>"
+                    },
+                    {
+                        display_name: "Email:",
+                        variable_name: "email",
+                        value: "<?php echo $email; ?>"
+                    },
+                    {
+                        display_name: "Amount",
+                        variable_name: "amount",
+                        value: "<?php echo $amount; ?>"
+                    }
+                ]
+            },
+            callback: function(response) {
+                const referenced = response.reference;
+                window.location.href = 'payment-success.php?successfullyPaid=' + referenced;
+            },
+            onClose: function() {
+                alert('window closed');
+            }
+        });
+        handler.openIframe();
+    }
+    </script>
+    </script>
 
     <!-- Sweet Alert -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
