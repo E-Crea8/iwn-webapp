@@ -16,12 +16,6 @@ if ($_POST['delete']) {
     $doDeleteQuery = mysqli_query($dbc, $deleteQuery);
     // $stmt->execute(array(':pid'=>$pid));
 
-    // Get user performing action
-    // $getUSer = "SELECT * FROM users WHERE user_id = $getUser";
-    // $doGetUser = mysqli_query($dbc, $getUSer);
-    // $row = mysqli_fetch_array($doGetUser);
-    // $getUserID = $row['user_id'];
-
 
     
     if ($doDeleteQuery == 1) {

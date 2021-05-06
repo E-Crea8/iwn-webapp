@@ -1303,7 +1303,7 @@ function equipmentLeaseForm($form_id){
                 </tr>
                 <tr style="height: 40px; text-align: left;">
                     <td class="formField">This document is the internet equipment custody agreement between <strong>I-WORLD NETWORKS LTD</strong> and '.$row["client_name"].'<br>
-                    Located at '.$row['address'].'<br>
+                    Located at Lagos bye pass, Beside Zenith Bank, Challenge ,Ibadan<br>
                     On this date '.$row["date_submitted"].'</td>
                 </tr>
             </table>
@@ -1448,7 +1448,7 @@ function equipmentLeaseForm($form_id){
         <div class="row" style="margin-top: 10px;">
             <table class="" style="width: 100%;">
                 <tr style="height: 20px; font-style: italic;">
-                    <td class="formField" style="text-align: center;"> I-World Networks Customer Lease Agreement Form © 2020</td>
+                    <td class="formField" style="text-align: center;"> I-World Networks Customer Lease Agreement Form © 2021</td>
                 </tr>
             </table>
         </div>

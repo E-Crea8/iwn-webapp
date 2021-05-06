@@ -164,7 +164,7 @@
                 <div class="row">
                 <div class="form-group col-12">
                     <label for="link_ccq">Link CCQ</label>
-                      <input id="linkCCQ" type="text" class="form-control" name="link_ccq" autofocus required>
+                      <input id="linkCCQ" type="text" class="form-control" name="link_ccq" autofocus>
                     </div>
                 </div>
 

@@ -196,28 +196,28 @@
     <!-- Data Table Script -->
     <script>  
  $(document).ready(function(){  
-      $('#ipOrderFormData').DataTable();  
+      $('#equipmentLeaseFormData').DataTable();  
  });  
  </script>  
 
 
 
-<!-- Delete IP Order Record Sweet Alert -->
+<!-- Delete Equipment Lease Record Sweet Alert -->
 <script>
  $(document).ready(function(){
   
   // readOrderForms* it will load products when document loads */
   
-  $(document).on('click', '#delete-internet-service-order-form', function(e){
+  $(document).on('click', '#delete-equipment-lease-form', function(e){
    
-   var ipId = $(this).data('id');
-   SwalDelete(ipId);
+   var eLId = $(this).data('id');
+   SwalDelete(eLId);
    e.preventDefault();
   });
   
  });
  
- function SwalDelete(ipId){
+ function SwalDelete(eLId){
   
   swal.fire({
    title: 'Are you sure?',
@@ -233,9 +233,9 @@
      return new Promise(function(resolve) {
           
         $.ajax({
-        url: 'delete-internet-service-order-form.php',
+        url: 'delete-equipment-lease-form.php',
         type: 'POST',
-           data: 'delete='+ipId,
+           data: 'delete='+eLId,
            dataType: 'json'
         })
         .done(function(response){
@@ -243,7 +243,7 @@
          location.reload(true);
         })
         .fail(function(){
-         swal.fire('Oops...', 'Something went wrong with delete process !', 'error');
+         swal.fire('Oops...', 'Something went wrong with delete process!', 'error');
         });
      });
       },
