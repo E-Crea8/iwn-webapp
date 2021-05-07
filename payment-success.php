@@ -31,7 +31,7 @@ $sql ="INSERT INTO subscription(customer_account_name, invoice_number, email, am
     if($stmt->execute()){
         echo '<script type="text/javascript">';
         echo 'setTimeout(function () { swal.fire("Success!","Your payment with the invoice number '.$invoiceNumber.'  was processed successfully. Click OK to go to client zone","success").then( () => {
-location.href = "https://iwn.ng"});';
+location.href = "https://iworldnetworks.unmsapp.com/crm/client-zone"});';
         echo '}, 1000);
         </script>';        
 $last_id = $pdo->lastInsertId();
@@ -76,43 +76,8 @@ $last_id = $pdo->lastInsertId();
                 <div class="row">
                     <div
                         class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
-                        <!-- <div class="login-brand">
-                            <img src="./dist/img/I-World Networks Logo.fw.png">
-                        </div> -->
-
-                        <!-- <div class="card card-success">
-                            <div class="card-header">
-                                <h4>Your Invoice has been paid successfully!</h4>
-                            </div>
-
-                            <div class="card-body">
-                                <form method="POST" id="loginForm" action="" class="needs-validation" novalidate="">
-                                    <div class="form-group">
-                                        <p>Your Invoice invNo has been cleared. Kindly click the button below to go tot
-                                            zone
-                                        </p>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div> -->
 
 
-                        <!-- <div class="mt-5 text-muted text-center">
-              Don't have an account? <a href="register.html">Create One</a>
-            </div> -->
-                        <!-- <form name="" action="https://iwn.ng">
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary btn-block" tabindex="4">
-                                    Continue to Client Zone
-                                </button>
-                            </div>
-                        </form> -->
                     </div>
                 </div>
             </div>
