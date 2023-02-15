@@ -1,6 +1,5 @@
 <?php
-//  include ('./controllers/loginAuth.php');
-
+include('inc/dbcon.php');
 
 //  Get all payment details from URL here
 $customerAccountName = $_GET['accountName'];
@@ -8,20 +7,36 @@ $invoiceNumber = $_GET['invoiceNumber'];
 $email = $_GET['email'];
 $amount = $_GET['amount'];
 
-// Add form values into Sessions
-// if(empty($accountName) || empty($invoiceNumber) || empty($email) || empty($amount)){
-//     header("Location: pay");
-//     }else{
-     session_start();
-    $_SESSION['customer_account_name'] =  $customerAccountName;
-    $_SESSION['invoice_number'] =  $invoiceNumber;
-    $_SESSION['email']  = $email;
-    $_SESSION['amount']  = $amount;
-    
-    //echo $first_name;
-    //echo $email;
-    
-    // }
+// Check if Customer's already made payment
+if (isset($_POST['checkPay'])) {
+  $customer_account_name = $_POST['customer_account_name'];
+  $invoice_number = $_POST['invoice_number'];
+  $newEmail = $_POST['email'];
+  $newAmount = $_POST['amount'];
+
+  $checkPaymentExist = "SELECT * FROM subscription WHERE invoice_number = '$invoice_number'";
+  $docheckPaymentExist = mysqli_query($dbc, $checkPaymentExist);
+  $checkIfNotEmpty = mysqli_num_rows($docheckPaymentExist);
+
+  if($checkIfNotEmpty > 0){
+    echo '<script type="text/javascript">';
+    echo 'setTimeout(function () { swal.fire("Oops!"," You have already paid for this invoice and your subscription has been activated.<br> Still having issues with your subscription? Please reach out to us <a href=mailto:account@iworldnetworks.net?subject=InternetSubscriptionIssues>here</a> ","warning");';
+    echo '}, 1000);</script>';
+
+  }
+  else{
+    echo '<script type="text/javascript">';
+    echo 'setTimeout(function () { swal.fire("Check Payment!"," Please, kindly click OK to check your payment information","info").then( () => {
+location.href = "pay?accountName='.$customer_account_name.'&invoiceNumber='.$invoice_number.'&email='.$newEmail.'&amount='.$newAmount.'"
+});';
+    echo '}, 1000);
+    </script>';
+
+
+  }
+
+
+}
 
 ?>
 
@@ -55,54 +70,49 @@ $amount = $_GET['amount'];
                     <div
                         class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
                         <div class="login-brand">
-                            <img src="./dist/img/iworld-logo.fw.png">
+                            <img src="./dist/img/iworld-logo.fw.png" alt="I-World Networks Logo">
                         </div>
 
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3>Payment Details</h3>
+                                <h4 style="text-align: center; font-size: 20px;">Internet Subscription Payment</h4>
                             </div>
 
                             <div class="card-body">
-                                <form method="POST" id="paymentForm" action="" class="needs-validation" novalidate="">
+                                <form method="POST" action="" class="needs-validation" novalidate="">
                                     <div class="form-group">
-                                        <label for="email"> Customer Account Name</label>
-                                        <input id="customerAccountName" type="text" class="form-control"
+                                        <!-- <label for="email"> Customer Account Name</label> -->
+                                        <input id="customerAccountName" type="hidden" class="form-control"
                                             name="customer_account_name" tabindex="1"
                                             value="<?php echo $customerAccountName; ?>" readonly="readonly" required
                                             autofocus>
                                     </div>
 
                                     <div class=" form-group">
-                                        <label for="email"> Invoice Number</label>
-                                        <input id="invoiceNumber" type="text" class="form-control" name="invoice_number"
+                                        <!-- <label for="email"> Invoice Number</label> -->
+                                        <input id="invoiceNumber" type="hidden" class="form-control" name="invoice_number"
                                             tabindex="1" value="<?php echo $invoiceNumber; ?>" readonly="readonly"
                                             required autofocus>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="email"> Email</label>
-                                        <input id="email" type="text" class="form-control" name="email" tabindex="1"
+                                        <!-- <label for="email"> Email</label> -->
+                                        <input id="email" type="hidden" class="form-control" name="email" tabindex="1"
                                             value="<?php echo $email; ?>" readonly="readonly" required autofocus>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="email"> Amount </label>
-                                        <input id="amount" type="text" class="form-control" name="showAmount" tabindex="1"
-                                            value="&#8358;<?php echo number_format($amount,2); ?>" readonly="readonly" required autofocus>
-                                    </div>
-                                    <div class="form-group">
-                                        <!--<label for="email"> Amount </label>-->
+                                        <!-- <label for="email"> Amount </label> -->
                                         <input id="amount" type="hidden" class="form-control" name="amount" tabindex="1"
                                             value="<?php echo $amount; ?>" readonly="readonly" required autofocus>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <button type="button" id="login" name="pay" class="btn btn-primary btn-block"
+                                        <button type="submit" name="checkPay" class="btn btn-primary btn-block"
                                             tabindex="4" style="background-color: #729635 !important;"
-                                            onclick="payWithPaystack()">
-                                            Pay Now
+                                            >
+                                            Proceed
                                         </button>
                                     </div>
                                 </form>
@@ -120,57 +130,6 @@ $amount = $_GET['amount'];
         </section>
     </div>
 
-    <!-- Paystack Payments Script -->
-    <script>
-    function payWithPaystack() {
-        const api = "pk_test_fa2df4ca7fea60ef6a625543478dbfabf3c5b508";
-        var handler = PaystackPop.setup({
-            key: api,
-            email: "<?php echo $email; ?>",
-            amount: <?php echo $amount*100; ?>,
-            currency: "NGN",
-            // ref: '' + Math.floor((Math.random() * 1000000000) +
-            //     1
-            // ), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-            customerAccountName: "<?php echo". $customerAccountName."; ?>",
-            invoiceNumber: "<?php echo $invoiceNumber; ?>",
-            email: "<?php echo $email; ?>",
-            // label: "Optional string that replaces customer email"
-            metadata: {
-                custom_fields: [{
-                        display_name: "Customer Account Name:",
-                        variable_name: "customer_account_name",
-                        value: "<?php echo $customerAccountName; ?>"
-                    },
-                    {
-                        display_name: "Invoice Number:",
-                        variable_name: "invoice_number",
-                        value: "<?php echo $invoiceNumber; ?>"
-                    },
-                    {
-                        display_name: "Email:",
-                        variable_name: "email",
-                        value: "<?php echo $email; ?>"
-                    },
-                    {
-                        display_name: "Amount",
-                        variable_name: "amount",
-                        value: "<?php echo $amount; ?>"
-                    }
-                ]
-            },
-            callback: function(response) {
-                const referenced = response.reference;
-                window.location.href = 'payment-success.php?successfullyPaid=' + referenced;
-            },
-            onClose: function() {
-                alert('window closed');
-            }
-        });
-        handler.openIframe();
-    }
-    </script>
-    </script>
 
     <!-- Sweet Alert -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -181,7 +140,7 @@ $amount = $_GET['amount'];
     <script src="./dist/modules/tooltip.js"></script>
     <script src="./dist/modules/bootstrap/js/bootstrap.min.js"></script>
     <script src="./dist/modules/nicescroll/jquery.nicescroll.min.js"></script>
-    <script src="./dist/modules/moment.min.js"></script>
+    <!-- <script src="./dist/modules/moment.min.js"></script> -->
     <script src="./dist/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
     <script src="./dist/js/sa-functions.js"></script>
 

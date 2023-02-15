@@ -43,8 +43,10 @@ $amount = $_GET['amount'];
     <link rel="stylesheet" href="./dist/css/style.css">
 
     <link rel="stylesheet" href="./assets/sweetalert/css/sweetalert2.min.css">
-    <script src="https://js.paystack.co/v1/inline.js"></script>
 
+    <!-- Inter-Switch API-->
+    <script type="text/javascript" src="https://qa.interswitchng.com/collections/public/javascripts/inline-checkout.js">
+    </script>
 </head>
 
 <body>
@@ -55,7 +57,7 @@ $amount = $_GET['amount'];
                     <div
                         class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
                         <div class="login-brand">
-                            <img src="./dist/img/iworld-logo.fw.png">
+                            <img src="./dist/img/I-World Networks Logo.fw.png">
                         </div>
 
                         <div class="card card-primary">
@@ -67,7 +69,7 @@ $amount = $_GET['amount'];
                                 <form method="POST" id="paymentForm" action="" class="needs-validation" novalidate="">
                                     <div class="form-group">
                                         <label for="email"> Customer Account Name</label>
-                                        <input id="customerAccountName" type="text" class="form-control"
+                                        <input id="param-customerAccountName" type="text" class="form-control"
                                             name="customer_account_name" tabindex="1"
                                             value="<?php echo $customerAccountName; ?>" readonly="readonly" required
                                             autofocus>
@@ -75,33 +77,36 @@ $amount = $_GET['amount'];
 
                                     <div class=" form-group">
                                         <label for="email"> Invoice Number</label>
-                                        <input id="invoiceNumber" type="text" class="form-control" name="invoice_number"
-                                            tabindex="1" value="<?php echo $invoiceNumber; ?>" readonly="readonly"
-                                            required autofocus>
+                                        <input id="param-invoiceNumber" type="text" class="form-control"
+                                            name="invoice_number" tabindex="1" value="<?php echo $invoiceNumber; ?>"
+                                            readonly="readonly" required autofocus>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="email"> Email</label>
-                                        <input id="email" type="text" class="form-control" name="email" tabindex="1"
-                                            value="<?php echo $email; ?>" readonly="readonly" required autofocus>
+                                        <input id="param-email" type="text" class="form-control" name="email"
+                                            tabindex="1" value="<?php echo $email; ?>" readonly="readonly" required
+                                            autofocus>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="email"> Amount </label>
-                                        <input id="amount" type="text" class="form-control" name="showAmount" tabindex="1"
-                                            value="&#8358;<?php echo number_format($amount,2); ?>" readonly="readonly" required autofocus>
+                                        <input id="param-amount" type="text" class="form-control" name="amount"
+                                            tabindex="1" value="<?php echo $amount; ?>" readonly="readonly" required
+                                            autofocus>
                                     </div>
+
                                     <div class="form-group">
-                                        <!--<label for="email"> Amount </label>-->
-                                        <input id="amount" type="hidden" class="form-control" name="amount" tabindex="1"
-                                            value="<?php echo $amount; ?>" readonly="readonly" required autofocus>
+                                        <!-- <label for="email">Merchant code</label> -->
+                                        <input type="hidden" id="param-merchantCode" name="merchant_code"
+                                            value="MX15933" class="form-control">
                                     </div>
 
 
+
                                     <div class="form-group">
-                                        <button type="button" id="login" name="pay" class="btn btn-primary btn-block"
-                                            tabindex="4" style="background-color: #729635 !important;"
-                                            onclick="payWithPaystack()">
+                                        <button type="button" name="pay" class="btn btn-primary btn-block" tabindex="4"
+                                            style="background-color: #729635 !important;">
                                             Pay Now
                                         </button>
                                     </div>
@@ -120,56 +125,53 @@ $amount = $_GET['amount'];
         </section>
     </div>
 
-    <!-- Paystack Payments Script -->
+    <!-- Inter-Switch Payments Script -->
     <script>
-    function payWithPaystack() {
-        const api = "pk_test_fa2df4ca7fea60ef6a625543478dbfabf3c5b508";
-        var handler = PaystackPop.setup({
-            key: api,
-            email: "<?php echo $email; ?>",
-            amount: <?php echo $amount*100; ?>,
-            currency: "NGN",
-            // ref: '' + Math.floor((Math.random() * 1000000000) +
-            //     1
-            // ), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-            customerAccountName: "<?php echo". $customerAccountName."; ?>",
-            invoiceNumber: "<?php echo $invoiceNumber; ?>",
-            email: "<?php echo $email; ?>",
-            // label: "Optional string that replaces customer email"
-            metadata: {
-                custom_fields: [{
-                        display_name: "Customer Account Name:",
-                        variable_name: "customer_account_name",
-                        value: "<?php echo $customerAccountName; ?>"
-                    },
-                    {
-                        display_name: "Invoice Number:",
-                        variable_name: "invoice_number",
-                        value: "<?php echo $invoiceNumber; ?>"
-                    },
-                    {
-                        display_name: "Email:",
-                        variable_name: "email",
-                        value: "<?php echo $email; ?>"
-                    },
-                    {
-                        display_name: "Amount",
-                        variable_name: "amount",
-                        value: "<?php echo $amount; ?>"
-                    }
-                ]
-            },
-            callback: function(response) {
-                const referenced = response.reference;
-                window.location.href = 'payment-success.php?successfullyPaid=' + referenced;
-            },
-            onClose: function() {
-                alert('window closed');
-            }
-        });
-        handler.openIframe();
+    var submitForm = document.getElementById("paymentForm");
+
+    submitForm.addEventListener("submit", submitHandler);
+
+    function submitHandler(event) {
+        event.preventDefault();
+
+        var merchantCode = document.getElementById("param-merchantCode").value;
+        var customerAccountName = document.getElementById("param-customerAccountName").value;
+        var invoiceNumber = document.getElementById("param-invoiceNumber").value;
+        var email = document.getElementById("param-email").value;
+        var amount = document.getElementById("param-amount").value;
+
+        // var customerName = document.getElementById("param-customerName").value;
+        // var customerId = document.getElementById("param-customerId").value;
+
+        // var mode = document.getElementById("param-mode").value;
+
+        var redirectUrl = location.href;
+
+        var paymentRequest = {
+            merchant_code: merchantCode,
+            pay_item_id: itemId,
+            txn_ref: transRef,
+            amount: amount,
+            currency: 566,
+            site_redirect_url: redirectUrl,
+            onComplete: paymentCallback,
+            mode: mode
+        };
+
+        if (customerName != "") {
+            paymentRequest.cust_name = customerName;
+        }
+
+        if (customerId != "") {
+            paymentRequest.cust_id = customerId;
+        }
+
+        window.webpayCheckout(paymentRequest);
     }
-    </script>
+
+    function paymentCallback(response) {
+        console.log(response);
+    }
     </script>
 
     <!-- Sweet Alert -->

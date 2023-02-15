@@ -1,7 +1,5 @@
 {
-    "cSpell.words": [
-        "sme",
-        "swal"
-    ],
-    "git.ignoreLimitWarning": true
+  "cSpell.words": ["sme", "swal"],
+  "git.ignoreLimitWarning": true,
+  "liveServer.settings.port": 5501
 }

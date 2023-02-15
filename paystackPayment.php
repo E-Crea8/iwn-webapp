@@ -55,7 +55,7 @@ $amount = $_GET['amount'];
                     <div
                         class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
                         <div class="login-brand">
-                            <img src="./dist/img/iworld-logo.fw.png">
+                            <img src="./dist/img/I-World Networks Logo.fw.png">
                         </div>
 
                         <div class="card card-primary">
@@ -88,12 +88,7 @@ $amount = $_GET['amount'];
 
                                     <div class="form-group">
                                         <label for="email"> Amount </label>
-                                        <input id="amount" type="text" class="form-control" name="showAmount" tabindex="1"
-                                            value="&#8358;<?php echo number_format($amount,2); ?>" readonly="readonly" required autofocus>
-                                    </div>
-                                    <div class="form-group">
-                                        <!--<label for="email"> Amount </label>-->
-                                        <input id="amount" type="hidden" class="form-control" name="amount" tabindex="1"
+                                        <input id="amount" type="text" class="form-control" name="amount" tabindex="1"
                                             value="<?php echo $amount; ?>" readonly="readonly" required autofocus>
                                     </div>
 

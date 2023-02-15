@@ -1128,20 +1128,32 @@ function EnterpriseServiceOrderForm($form_id){
 function createEquipmentLeaseForm(){
     global $dbc;
 
-        $client_name = $_POST['client_name'];
         $title = $_POST['title'];
         $customer_name = $_POST['customer_name'];
         $phone = $_POST['phone'];
         $email = $_POST['email'];
         $address = $_POST['address'];
-        $device_model_1 = $_POST['device_model_1'];
+        $gps_coordinate = $_POST['gps_coordinate'];
+        $equipment_name_1 = $_POST['equipment_name_1'];
+        $equipment_type_1 = $_POST['equipment_type_1'];
         $mac_add_1 = $_POST['mac_add_1'];
-        $device_model_2 = $_POST['device_model_2'];
+        $serial_number_1 = $_POST['serial_number_1'];
+        $model_part_1 = $_POST['model_part_1'];
+        $equipment_name_2 = $_POST['equipment_name_2'];
+        $equipment_type_2 = $_POST['equipment_type_2'];
         $mac_add_2 = $_POST['mac_add_2'];
-        $device_model_3 = $_POST['device_model_3'];
+        $serial_number_2 = $_POST['serial_number_2'];
+        $model_part_2 = $_POST['model_part_2'];
+        $equipment_name_3 = $_POST['equipment_name_3'];
+        $equipment_type_3 = $_POST['equipment_type_3'];
         $mac_add_3 = $_POST['mac_add_3'];
-        $device_model_4 = $_POST['device_model_4'];
+        $serial_number_3 = $_POST['serial_number_3'];
+        $model_part_3 = $_POST['model_part_3'];
+        $equipment_name_4 = $_POST['equipment_name_4'];
+        $equipment_type_4 = $_POST['equipment_type_4'];
         $mac_add_4 = $_POST['mac_add_4'];
+        $serial_number_4 = $_POST['serial_number_4'];
+        $model_part_4 = $_POST['model_part_4'];        
         $agreement_date = $_POST['agreement_date'];
         $witness_name = $_POST['witness_name'];
         $id_session = $_POST['id_session'];
@@ -1165,19 +1177,20 @@ function createEquipmentLeaseForm(){
 
 
             // Insert into app history table
-            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new equipment lease form form for $client_name')";
+            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new equipment lease form form for $customer_name')";
 
-            $insertEquipmentLeaseForm = "INSERT INTO equipment_lease_form (client_name, title, customer_name, phone, email, address, device_model_1, mac_add_1, device_model_2, mac_add_2, device_model_3, mac_add_3, device_model_4, mac_add_4, agreement_date, witness_name, form_id, date_submitted) 
-            VALUES ('$client_name', '$title', '$customer_name', '$phone', '$email', '$address', '$device_model_1', '$mac_add_1', '$device_model_2', '$mac_add_2', '$device_model_3', '$mac_add_3', '$device_model_4', '$mac_add_4', '$agreement_date', '$witness_name', '$randomUID', '$date')";
+            $insertEquipmentLeaseForm = "INSERT INTO equipment_lease_form (title, customer_name, phone, email, address, gps_coordinate, equipment_name_1, equipment_type_1, mac_add_1, serial_number_1, model_part_1, equipment_name_2, equipment_type_2, mac_add_2, serial_number_2, model_part_2, equipment_name_3, equipment_type_3, mac_add_3, serial_number_3, model_part_3, equipment_name_4, equipment_type_4, mac_add_4, serial_number_4, model_part_4, agreement_date, witness_name, form_id, date_submitted) 
+            VALUES ('$title', '$customer_name', '$phone', '$email', '$address', '$gps_coordinate', '$equipment_name_1', '$equipment_type_1', '$mac_add_1', '$serial_number_1', '$model_part_1', '$equipment_name_2', '$equipment_type_2', '$mac_add_2', '$serial_number_2', '$model_part_2', '$equipment_name_3', '$equipment_type_3', '$mac_add_3', '$serial_number_3', '$model_part_3', '$equipment_name_4', '$equipment_type_4', '$mac_add_4', '$serial_number_4', '$model_part_4', '$agreement_date', '$witness_name', '$randomUID', '$date')";
             $doEquipmentLeaseForm = mysqli_query($dbc, $insertEquipmentLeaseForm);
             $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
 
+
             echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!","Equipment lease form for '.$client_name.' created successfully. Click OK to view form data","success").then( () => {
+            echo 'setTimeout(function () { swal.fire("Success!","Equipment lease form for '.$customer_name.' created successfully. Click OK to view form data","success").then( () => {
     location.href = "equipment-lease-record"});';
             echo '}, 1000);
             </script>';        
-
+            
             // echo json_encode($doInsertCategoryName);
 
 
@@ -1199,7 +1212,7 @@ function manageEquipmentLeaseForm(){
         <thead style="font-size:12px;">
             <tr>
                 <th>SN</th>
-                <th>Client Name</th>
+                <th>Customer Name</th>
                 <th>Phone</th>
                 <th>Email</th>
                 <th style="width: 20%;">Action</th>
@@ -1208,7 +1221,7 @@ function manageEquipmentLeaseForm(){
         <tfoot style="font-size:12px;">
             <tr>
             <th>SN</th>
-            <th>Client Name</th>
+            <th>Cusstomer Name</th>
             <th>Phone</th>
             <th>Email</th>
             <th style="width: 20%;">Action</th>
@@ -1220,7 +1233,7 @@ function manageEquipmentLeaseForm(){
         {
             $sn++;
             $eLId = $row["id"];
-            $clientName = $row["client_name"];
+            $customerName = $row["customer_name"];
 
             // Create Random Unique Id
             $randomUID = md5(microtime(true).mt_Rand());
@@ -1228,7 +1241,7 @@ function manageEquipmentLeaseForm(){
             echo '
             <tr style="font-size:12px;">
             <td> '.$sn.' </td>
-            <td> '.$row["client_name"].' </td>
+            <td> '.$row["customer_name"].' </td>
             <td> '.$row["phone"].' </td>
             <td> '.$row["email"].' </td>
             <td> <a href="edit-equipment-lease-form?id='.$row["id"].'" class="btn btn-sm btn-info" ><i class="ion-edit"></i></a>
@@ -1284,7 +1297,7 @@ function equipmentLeaseForm($form_id){
         {
             $sn++;
             $eLId = $row["id"];
-            $clientName = $row["client_name"];
+            $customerName = $row["customer_name"];
 
             echo '
             <div class="row" style=margin-bottom: 10px;">
@@ -1297,133 +1310,144 @@ function equipmentLeaseForm($form_id){
 
 
         <div class="row">
-            <table class="" style="width: 100%;">
-                <tr style="height: 50px; text-align: center; padding: 40px 0px 20px 0px; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 700;">
-                    <td> <h4>CUSTOMER EQUIPMENT CUSTODY AGREEMENT</h4></td>
-                </tr>
-                <tr style="height: 40px; text-align: left;">
-                    <td class="formField">This document is the internet equipment custody agreement between <strong>I-WORLD NETWORKS LTD</strong> and '.$row["client_name"].'<br>
-                    Located at Lagos bye pass, Beside Zenith Bank, Challenge ,Ibadan<br>
-                    On this date '.$row["date_submitted"].'</td>
-                </tr>
-            </table>
+            <div style="width: 100%; padding: 5px 10px;">
+                 <h4 style="text-align: center; padding: 40px 0px 20px 0px; font-family: Georgia, Times New Roman, Times, serif; font-size: 18px; font-weight: 700;">
+                 EQUIPMENT CUSTODY FORM AND AGREEMENT </h4>
+                 <p> This is the Internet Service Equipment Custody agreement between 
+                 I-World Networks Limited RC 1556660 (Also Referred to as Internet Service Provider “ISP”) with 
+                 NCC License Number INT /025/19 and <span style=" font-weight: 600; text-decoration: underline;">'.$row["title"].'&nbsp;'.$row["customer_name"].'</span> 
+                 of <span style=" font-weight: 600; text-decoration: underline;">'.$row["address"].'</span></p>
+                 
+                 <p>The following equipment was installed at <span style=" font-weight: 600; text-decoration: underline;">'.$row["address"].'</span> and <span style=" font-weight: 600; text-decoration: underline;">'.$row["gps_coordinate"].'</span>
+                  for the purpose of providing Internet Service for <span style=" font-weight: 600; text-decoration: underline;">'.$row["title"].'&nbsp;'.$row["customer_name"].'</span>  and remains the property of
+                   I-World Networks Limited.
+                 </p>
+                
+            </div>
         </div>
 
-
-        <div class="row" style="margin-top: 5px; margin-bottom: -10px;">
-            <table class="" style="width: 100%;">
-                <tr style="height: 50px; text-align: left;">
-                    <td class="formField" style="font-size: 16px;"> <strong>CUSTOMER PRIMARY DETAILS</strong></td>
-                </tr>
-            </table>
-        </div>
-
-
-        <div class="row" style="margin-top: 0px;">
-            <table class="table-bordered" style="width: 100%;">
-            <tr style="height: 25px; text-align: left;">
-            <td class="formField"> Contact Person: '.$row["title"].'&nbsp;'.$row["customer_name"].'</td>
-        </tr>
-
-                <tr style="height: 25px; text-align: left;">
-                    <td class="formField"> Telephone Number: '.$row["phone"].'</td>
-                </tr>
-
-                <tr style="height: 25px; text-align: left;">
-                    <td class="formField"> Email Address: '.$row["email"].'</td>
-                </tr>
-                </table>
-        </div>
-
-        <div class="row" style="margin-top: 5px; margin-bottom: -10px;">
-            <table class="" style="width: 100%;">
-                <tr style="height: 50px; text-align: left;">
-                    <td class="formField" style="font-size: 16px;"> <strong>DEVICE DETAILS</strong></td>
-                </tr>
-            </table>
-        </div>
+        <div class="row">
+        <div style="width: 100%; padding: 0px 10px;">
+        <h4 style="text-align: left; padding: 40px 0px 20px 0px; font-family: Georgia, Times New Roman, Times, serif; font-size: 18px; font-weight: 700; margin-bottom: -10px;":>Installed Equipment Details </h4>
+        <span style"font-weight: bold;"> <strong>1.</strong> </span><br>
+        <p>
+        <span style="font-weight: 600">Equipment Name:</span> '.$row["equipment_name_1"].'<br>
+        <span style="font-weight: 600">Equipment Type:</span> '.$row["equipment_type_1"].'<br>
+        <span style="font-weight: 600">Mac Address:</span> '.$row["mac_add_1"].'<br> 
+        <span style="font-weight: 600">Serial Number:</span> '.$row["serial_number_1"].'<br>
+        <span style="font-weight: 600">Model Part (SKU):</span> '.$row["model_part_1"].'
+                
+        </p>
+       
+   </div>
+</div>
 
 
-        <div class="row" style="margin-top: 0px;">
-            <table class="table-bordered" style="width: 100%;">
-            <tr style="height: 25px; text-align: left;">
-                <td class="formField"> Device Model 1: '.$row["device_model_1"].'</td>
-            </tr>
+<div class="row">
+<div style="width: 100%; padding: 0px 10px;">
+<span style"font-weight: bold;"> <strong>2.</strong> </span><br>
+<p>
+<span style="font-weight: 600">Equipment Name:</span> '.$row["equipment_name_2"].'<br>
+<span style="font-weight: 600">Equipment Type:</span> '.$row["equipment_type_2"].'<br>
+<span style="font-weight: 600">Mac Address:</span> '.$row["mac_add_2"].'<br> 
+<span style="font-weight: 600">Serial Number:</span> '.$row["serial_number_2"].'<br>
+<span style="font-weight: 600">Model Part (SKU):</span> '.$row["model_part_2"].'
+        
+</p>
 
-            <tr style="height: 25px; text-align: left;">
-                <td class="formField"> Mac Add 1: '.$row["mac_add_1"].'</td>
-            </tr>
-
-            <tr style="height: 25px; text-align: left;">
-                <td class="formField"> Device Model 2: '.$row["device_model_2"].'</td>
-            </tr>
-
-            <tr style="height: 25px; text-align: left;">
-                <td class="formField"> Mac Add 2: '.$row["mac_add_2"].'</td>
-            </tr>
-
-            <tr style="height: 25px; text-align: left;">
-                <td class="formField"> Device Model 3: '.$row["device_model_3"].'</td>
-            </tr>
-
-            <tr style="height: 25px; text-align: left;">
-                <td class="formField"> Mac Add 3: '.$row["mac_add_3"].'</td>
-            </tr>
-
-            <tr style="height: 25px; text-align: left;">
-                <td class="formField"> Device Model 4: '.$row["device_model_4"].'</td>
-            </tr>
-
-            <tr style="height: 25px; text-align: left;">
-                <td class="formField"> Mac Add 4: '.$row["mac_add_4"].'</td>
-            </tr>
-            </table>
-        </div>
+</div>
+</div>
 
 
-        <div class="row" style="margin-top: 5px; margin-bottom: -10px;">
-            <table class="" style="width: 100%;">
-                <tr style="height: 50px; text-align: left;">
-                    <td class="formField" style="font-size: 16px;"> <strong>TERMS AND CONDITIONS</strong></td>
-                </tr>
-            </table>
+<div class="row">
+<div style="width: 100%; padding: 0px 10px;">
+<span style"font-weight: bold;"> <strong>3.</strong> </span><br>
+<p>
+<span style="font-weight: 600">Equipment Name:</span> '.$row["equipment_name_3"].'<br>
+<span style="font-weight: 600">Equipment Type:</span> '.$row["equipment_type_3"].'<br>
+<span style="font-weight: 600">Mac Address:</span> '.$row["mac_add_3"].'<br> 
+<span style="font-weight: 600">Serial Number:</span> '.$row["serial_number_3"].'<br>
+<span style="font-weight: 600">Model Part (SKU):</span> '.$row["model_part_3"].'
+        
+</p>
+
+</div>
+</div>
+
+
+<div class="row">
+<div style="width: 100%; padding: 0px 10px 50px 10px;">
+<span style"font-weight: bold;"> <strong>4.</strong> </span><br>
+<p>
+<span style="font-weight: 600">Equipment Name:</span> '.$row["equipment_name_4"].'<br>
+<span style="font-weight: 600">Equipment Type:</span> '.$row["equipment_type_4"].'<br>
+<span style="font-weight: 600">Mac Address:</span> '.$row["mac_add_4"].'<br> 
+<span style="font-weight: 600">Serial Number:</span> '.$row["serial_number_4"].'<br>
+<span style="font-weight: 600">Model Part (SKU):</span> '.$row["model_part_4"].'
+        
+</p>
+
+</div>
+</div>
+
+<div class="row">
+<div style="width: 100%; padding: 0px 10px;">
+     <h4 style="text-align: left; margin-bottom: -10px; padding: 40px 0px 20px 0px; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 700;">
+     (RIGHTS & OBLIGATION UNER THIS AGREEMENT) </h4>
+     <p style="font-weight: 700"> This is the Internet Service Equipment Custody agreement between
+      I-World Networks Rights and Obligation to Equipment in Clients Custody 
+      <ol>
+            <li> I-World Networks (ISP) reserves the right to change and upgrade equipment to the latest technology
+             to improve on service to the client at any time.  
+            </li>
+            <li> I-World Networks (ISP) reserves the right to scheduled or Emergency Maintenance on equipment. </li>
+            <li> I-World Networks (ISP) reserves the right to retrieve equipment within 60days of client account non 
+            inactive due to non-renewal of Monthly Internet Service subscription or due to travelling or temporary relocation.</li>
+
+      </ol>
+
+     </p>
+         
+</div>
+</div>
+
+
+<div class="row">
+<div style="width: 100%; padding: 5px 10px;">
+     <h4 style="text-align: left; margin-bottom: -10px; padding: 40px 0px 20px 0px; font-family: Georgia, Times New Roman, Times, serif; font-size: 16px; font-weight: 700;">
+     Client Rights and Obligation to Equipment </h4>
+     <p style="font-weight: 500"> I, <span style=" font-weight: 600; text-decoration: underline;">'.$row["title"].'&nbsp;'.$row["customer_name"].'</span>,
+      (also referred to as Client) of the above address, agree to the following: 
+      <ol>
+            <li> Client agrees that the above stated equipment belongs to I-World Networks Ltd..  
+            </li>
+            <li> Client is obligated to regularly renew his subscription every month. </li>
+            <li> Client is obligated to protect the devices properly with either of the following.</li>
+            <div style="margin-left: 70px; line-height: 20px; margin-top: 2px;"> a) UPS, Stabilizer or Surge Protector.<br>
+            b) Also, it is advisable to ensure that the earthing system of the premises is in good condition.
         </div>
         
+            <li> When planning to travel out of town or country for more than Thirty (30) days, the client is 
+            
+            obligated to officially give at least Three (3) days prior notice to I-World Networks Ltd so that the 
+            equipment can be retrieved in an attempt to protect it from damage. The equipment will be re-installed
+            at no cost upon arrival.</li>
 
-        <div class="row" style="margin-top: 0px;">
-        <table class="" style="width: 100%;">
-        <tr style="height: 25px; text-align: left;">
-        <td class="formField"> i. The above stated equipment remains the property of I-World Networks Limited.</td>
-    </tr>
+      </ol>
+     </p>
 
-        <tr style="height: 25px; text-align: left;">
-            <td class="formField"> ii. In a bid to protect the equipment, Customer agrees:</td>
-        </tr>
+         
+</div>
+</div>
 
-        <tr style="height: 25px; text-align: left;">
-            <td class="formField" style="padding-left: 30px;"> (a) to connect the internet equipment to a standard UPS or stabilizer with a surge protector.</td>
-        </tr>
 
-        <tr style="height: 25px; text-align: left;">
-        <td class="formField" style="padding-left: 30px;"> (b) to make sure that the premises are well earthed.</td>
-    </tr>
 
-    <tr style="height: 25px; text-align: left;">
-    <td class="formField"> iii. I-World Networks reserves the right to upgrade and maintain the equipment for the purpose of the service being provided to customer with or without prior notification.</td>
-</tr>
-
-<tr style="height: 25px; text-align: left;">
-<td class="formField"> iv. I-World Networks Limited reserves the right to retrieve the equipment 15days after the customer&#39;s account is inactive in order to protect it from damage.</td>
-</tr>
-
-        </table>
-        </div>
 
 
         <div class="row" style="margin-top: 10px; margin-bottom: 25px;">
-            <table class="" style="width: 100%;">
+            <table style="width: 100%;">
                 <tr style="height: 45px; text-align: left;">
-                    <td style="padding-left: 10px;">Agreed to this on '.$row["agreement_date"].' in the presence of '.$row["witness_name"].'
+                    <td style="padding-left: 10px; font-size: 14px;" >Agreed to this on '.$row["agreement_date"].' in the presence of '.$row["witness_name"].'
                     </td>
                 </tr>
             </table>
@@ -1437,7 +1461,7 @@ function equipmentLeaseForm($form_id){
                         <span style="text-align: center;">Customer Signature</span></td>
                         
                         <td style="text-align: center; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 400;"> -----------------------------------<br>
-                        <span style="text-align: center;">Witness Signature</span></td>
+                        <span style="text-align: center;">Customer Witness Signature</span></td>
 
                         <td style="text-align: center; font-family: Georgia, Times New Roman, Times, serif; font-size: 14px; font-weight: 400;"> -----------------------------------<br>
                         <span style="text-align: center;">I-World Representative</span></td>

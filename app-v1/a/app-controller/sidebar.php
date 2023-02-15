@@ -25,7 +25,7 @@
 
             <li class="menu-header">Internet and Equipment</li>
 
-            <!-- Book Categories -->
+            <!-- Internet and Equipment Service Here -->
             <li>
                           <a href="#" class="has-dropdown"><i class="ion ion-wifi"></i><span>Internet Service</span></a>
                           <ul class="menu-dropdown">
@@ -40,7 +40,7 @@
 
             <!-- <li class="menu-header">Forms</li> -->
 
-            <!-- Book Categories -->
+            <!-- Equipments -->
             <li>
               <a href="#" class="has-dropdown"><i class="ion ion-ios-gear"></i><span>Equipments</span></a>
               <ul class="menu-dropdown">
@@ -67,6 +67,19 @@
                 <li><a href="equipment-change-record"><i class="ion ion-android-radio-button-on"></i> Equipment Change Record</a></li>
               </ul>
             </li>
+
+            <!-- Internet Subscription -->
+
+            <li class="menu-header">Internet Subscription</li>
+
+            <li>
+                          <a href="#" class="has-dropdown"><i class="ion ion-card"></i><span>Subscription</span></a>
+                          <ul class="menu-dropdown">
+                          <li><a href="internet-subscription-payment-record"><i class="ion ion-android-radio-button-on"></i> Payment Records</a></li>
+                          </ul>
+                        </li>
+            <li>
+            
 
               <!-- IAS Form Section -->
 
