@@ -12,7 +12,7 @@
   <!-- Shortcut Icon -->
   <link rel="shortcut icon" href="./../dist/img/favicon.fw.png">
 
-  <title>IWN App - Site Survey Form</title>
+  <title>IWN App - Edit User Record</title>
 
   <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/modules/ionicons/css/ionicons.min.css">
@@ -74,97 +74,127 @@
       <?php include ('./app-controller/sidebar.php'); ?>
       <!-- End Sidebar Menus -->
 
+      <?php
+        // Get user id from URL
+        $uID = $_GET['id'];
+
+        // Decode User ID using the PHP base_64 decode function
+        $getUser = base64_decode($uID);
+
+        // Get users record data from users login table in database
+        $getUserData = "SELECT * FROM users WHERE user_id = '$getUser'";
+
+        $doGetUserData = mysqli_query($dbc, $getUserData);
+
+        while($rows = mysqli_fetch_assoc($doGetUserData)){
+          $firstName = $rows['firstname'];
+          $lastName = $rows['lastname'];
+          $email  = $rows['email'];
+          $position  = $rows['position'];
+          $department  = $rows['department'];
+          $active_status  = $rows['active_status'];
+
+        // Replace 1 and 0 figure here
+          if ($active_status == 1){
+            $userActiveStatus = 'Active';
+          }else{
+            $userActiveStatus = 'Not Active';
+
+          }
+      ?>
 
       <div class="main-content">
         <section class="section">
           <h1 class="section-header">
-            <div>Site Survey Form
+            <div>Edit User Record
               <br>
-              <span style="font-size:11px; color:#FF0000;"> Customer Details</span>
+              <span style="font-size:11px; color:#FF0000;"> User Details</span>
             </div>
           </h1>
           <div class="section-body">
             <div class="card">
               <div class="card-body">
                 <?php
-                if(isset($_POST['create-site-survey-customer-details'])){
-                  createSiteSurveyCustomerDetails(); //here goes the function call
+                if(isset($_POST['update-user'])){
+                  updateUserData(); //here goes the function call
                }
                ?>
 
 
 
-                <form name="create-site-survey-customer-details" method="POST">
+                <form name="update-user-data" method="POST">
 
-                  <div class="form-header-label">Client Information</div>
+                  <div class="form-header-label">User Information</div>
                   <!-- Row 1 -->
                   <div class="row">
                     <div class="form-group col-6">
-                      <label for="client_name">Name of Organization/Client</label>
-                      <input id="client_name" type="text" class="form-control" name="client_name" autofocus required>
+                      <label for="firstname">Firstname</label>
+                      <input id="firstname" type="text" value="<?php echo $rows['firstname']; ?>" class="form-control"
+                        name="firstname" autofocus required>
                     </div>
                     <div class="form-group col-6">
-                      <label for="address">Business/Home Address</label>
-                      <textarea class="form-control" id="address" name="address" row="3" col="3" autofocus
-                        required></textarea>
+                      <label for="lastname">Lastname</label>
+                      <input id="lastname" type="text" value="<?php echo $rows['lastname']; ?>" class="form-control"
+                        name="lastname" autofocus required>
                     </div>
                   </div>
 
                   <!-- Row 2 -->
                   <div class="row">
                     <div class="form-group col-6">
-                      <label for="phone">Phone</label>
-                      <input id="phone" type="text" class="form-control" name="phone" autofocus required>
+                      <label for="email">Email</label>
+                      <input id="email" type="email" value="<?php echo $rows['email']; ?>" class="form-control"
+                        name="email" autofocus required>
                     </div>
+
                     <div class="form-group col-6">
-                      <label for="coordinate">Accurate GPS Coordinate</label>
-                      <input id="coordinate" type="text" class="form-control" name="coordinate" autofocus required>
+                      <label for="active_status">Active Status
+                      </label>
+                      <input id="active_status" type="text" class="form-control"
+                        value="<?php echo $userActiveStatus; ?>" name="active_status" readonly="" autofocus>
                     </div>
+
                   </div>
-
-                  <div class="form-header-label">Any Other Information</div>
-
 
                   <!-- Row 3 -->
                   <div class="row">
                     <div class="form-group col-6">
-                      <label>Length of Cable required for the installation</label>
-                      <input type="text" class="form-control" id="cableLength" name="cable_length" autofocus required />
+                      <label for="Position">Position</label>
+                      <select class="form-control" id="position" name="position" required>
+                        <option selected="selected" value="<?php echo $rows['position']; ?>">
+                          <?php echo $rows['position']; ?></option>
+                        <option value="CTO">CTO</option>
+                        <option value="Managing Director">Managing Director</option>
+                        <option value="Business Manager">Business Manager</option>
+                        <option value="Network Engineer">Network Engineer</option>
+                        <option value="Customer Support">Customer Support</option>
+                        <option value="Business Executive">Business Executive</option>
+                      </select>
                     </div>
                     <div class="form-group col-6">
-                      <label for="other_info">Any Other Necessary Information</label>
-                      <textarea class="form-control" id="otherInfo" name="other_info" row="3" col="3" autofocus
-                        required></textarea>
+                      <label for="department">Set User priviledge</label>
+                      <select class="form-control" id="department" name="department" required>
+                        <option selected="selected" value="<?php echo $rows['department']; ?>">
+                          <?php echo $rows['department']; ?></option>
+                        <option value="Super Admin">Super Admin</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Business">Business</option>
+                        <option value="Support">Support</option>
+                      </select>
                     </div>
                   </div>
-
-
-                  <!-- Row 4 -->
-                  <div class="row">
-                    <div class="form-group col-6">
-                      <label for="earth_test_info">Earthing Test Information</label>
-                      <textarea class="form-control" id="earthTestInfo" name="earth_test_info" row="3" col="3" autofocus
-                        required></textarea>
-                    </div>
-                    <div class="form-group col-6">
-                      <label>Survey Conducted By</label>
-                      <input type="text" class="form-control" id="conductedBy" name="conducted_by" autofocus required />
-                    </div>
-
-                  </div>
-
 
 
 
                   <div class="form-group">
-                    <!-- <label for="email">User ID</label> -->
+                    <input type="hidden" name="user_id" value="<?php echo $getUser; ?>" class="form-control">
                     <input type="hidden" name="id_session" value="<?php echo $id_session; ?>" class="form-control"
                       name="id_session">
                   </div>
 
                   <div class="form-group">
-                    <button type="submit" name="create-site-survey-customer-details" class="btn btn-primary btn-block">
-                      Submit and Continue Form
+                    <button type="submit" name="update-user" class="btn btn-primary btn-block">
+                      Update User Data
                     </button>
                   </div>
                 </form>
@@ -174,6 +204,12 @@
           </div>
         </section>
       </div>
+
+      <!-- END WHILE LOOP -->
+      <?php
+          } 
+      ?>
+
       <footer class="main-footer">
         <div class="footer-left">
           <?php

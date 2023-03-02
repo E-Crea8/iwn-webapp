@@ -11,28 +11,28 @@ if (isset($_POST['login'])) {
   $hashPassword = md5($password);
   $active_status = 1;
 if ($hashPassword == ''){
-     ?>    
-                  
-                  <script>
-                    setTimeout(function () { 
-                      swal.fire({
-                        title: "Login Error!",
-                        text: "Password is missing",
-                        icon: "error",
-                        confirmButtonColor: "#3085d6",
-                        className : "btn btn-danger",
-                        confirmButtonText: "OK"
-                      },
-                      ); }, 1000); 
-              </script>                 
-                  
-                  
-     
-                <!-- <script type="text/javascript">
+     ?>
+
+<script>
+setTimeout(function() {
+  swal.fire({
+    title: "Login Error!",
+    text: "Password is missing",
+    icon: "error",
+    confirmButtonColor: "#3085d6",
+    className: "btn btn-danger",
+    confirmButtonText: "OK"
+  }, );
+}, 1000);
+</script>
+
+
+
+<!-- <script type="text/javascript">
                 alert("Password is missing!");
                 window.location = "../app-home";
                 </script> -->
-        <?php
+<?php
 }else{
 //create some sql statement             
         $checkUserSql = "SELECT * FROM  users WHERE  email='" . $email . "' AND  password =  '" . $hashPassword . "'";
@@ -72,9 +72,9 @@ if ($hashPassword == ''){
           $userLoginHistory = "INSERT INTO app_history (id,email,action,date)VALUES(Null,'$getEmail','Logged In',Null)";
           mysqli_query($dbc,$userLoginHistory)or die ('Error in adding User Action to app history table');
 
-          ?>    
-             
-             <?php
+          ?>
+
+<?php
 
                   echo '
                   <script>
@@ -99,7 +99,7 @@ if ($hashPassword == ''){
 
             ?>
 
-             <?php        
+<?php        
            
         }
 
@@ -108,9 +108,9 @@ if ($hashPassword == ''){
           $userLoginHistory = "INSERT INTO app_history (id,email,action,date)VALUES(Null,'$getEmail','Logged In',Null)";
           mysqli_query($dbc,$userLoginHistory)or die ('Error in adding User Action to app history table');
 
-          ?>    
-             
-             <?php
+          ?>
+
+<?php
 
                   echo '
                   <script>
@@ -135,7 +135,7 @@ if ($hashPassword == ''){
 
             ?>
 
-             <?php        
+<?php        
            
         }
 
@@ -145,9 +145,9 @@ if ($hashPassword == ''){
           $userLoginHistory = "INSERT INTO app_history (id,email,action,date)VALUES(Null,'$getEmail','Logged In',Null)";
           mysqli_query($dbc,$userLoginHistory)or die ('Error in adding User Action to app history table');
 
-          ?>    
-             
-             <?php
+          ?>
+
+<?php
 
                   echo '
                   <script>
@@ -172,7 +172,7 @@ if ($hashPassword == ''){
 
             ?>
 
-             <?php        
+<?php        
            
         }        
 
@@ -182,9 +182,9 @@ if ($hashPassword == ''){
           $userLoginHistory = "INSERT INTO app_history (id,email,action,date)VALUES(Null,'$getEmail','Logged In',Null)";
           mysqli_query($dbc,$userLoginHistory)or die ('Error in adding User Action to app history table');
 
-          ?>    
-             
-             <?php
+          ?>
+
+<?php
 
                   echo '
                   <script>
@@ -209,38 +209,38 @@ if ($hashPassword == ''){
 
             ?>
 
-             <?php        
+<?php        
            
         }        
         
         elseif ($_SESSION['active_status']=='0'){
            
-            ?>                        
-            <script>
-            setTimeout(function () { 
-              swal.fire({
-                title: "Login Error!",
-                text: "You account is inactive. Contact the super administrator. ",
-                icon: "error",
-                confirmButtonColor: "#3085d6",
-                className : "btn btn-danger",
-                confirmButtonText: "OK"
-              },
-              ); }, 1000); 
-              </script>                 
+            ?>
+<script>
+setTimeout(function() {
+  swal.fire({
+    title: "Login Error!",
+    text: "You account is inactive. Contact the super administrator. ",
+    icon: "error",
+    confirmButtonColor: "#3085d6",
+    className: "btn btn-danger",
+    confirmButtonText: "OK"
+  }, );
+}, 1000);
+</script>
 
-            <?php        
+<?php        
           
        }
             } else {
             //IF user is not active
               ?>
-                <!-- <script type="text/javascript">
+<!-- <script type="text/javascript">
                 alert("Username or Password is not correct.");
                 window.location = "./app-home";
                 </script> -->
 
-                <?php
+<?php
 
 
                     echo '
@@ -258,11 +258,11 @@ if ($hashPassword == ''){
                       </script>                 
 
                      ';
-  ?>          
-                  
-                  
+  ?>
 
-              <?php
+
+
+<?php
 
             }
 

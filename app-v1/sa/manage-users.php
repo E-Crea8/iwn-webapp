@@ -1,5 +1,7 @@
 <?php
  include ('./app-controller/functions.php');
+
+
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +14,7 @@
   <!-- Shortcut Icon -->
   <link rel="shortcut icon" href="./../dist/img/favicon.fw.png">
 
-  <title>IWN App - Site Survey Form</title>
+  <title>IWN App - Manage Users</title>
 
   <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/modules/ionicons/css/ionicons.min.css">
@@ -23,6 +25,11 @@
   <link rel="stylesheet" href="../dist/css/demo.css">
   <link rel="stylesheet" href="../dist/css/style.css">
   <link rel="stylesheet" href="../assets/sweetalert/css/sweetalert2.min.css">
+
+  <!-- Data Tables -->
+  <link rel="stylesheet" href="../modules/datatables/datatables.min.css">
+
+  <script src="../modules/datatables/datatables.min.js"></script>
 
 </head>
 
@@ -78,96 +85,23 @@
       <div class="main-content">
         <section class="section">
           <h1 class="section-header">
-            <div>Site Survey Form
+            <div>Manage Users
               <br>
-              <span style="font-size:11px; color:#FF0000;"> Customer Details</span>
+              <span style="font-size:11px; color:#FF0000;"> Note: Records are sorted from newest to oldest</span>
             </div>
           </h1>
           <div class="section-body">
             <div class="card">
               <div class="card-body">
-                <?php
-                if(isset($_POST['create-site-survey-customer-details'])){
-                  createSiteSurveyCustomerDetails(); //here goes the function call
-               }
-               ?>
+
+                <!-- Fetch Data Table Here -->
+                <div class="table-responsive" id="load-categories">
+
+                  <?php manageUsers(); ?>
+                </div>
 
 
 
-                <form name="create-site-survey-customer-details" method="POST">
-
-                  <div class="form-header-label">Client Information</div>
-                  <!-- Row 1 -->
-                  <div class="row">
-                    <div class="form-group col-6">
-                      <label for="client_name">Name of Organization/Client</label>
-                      <input id="client_name" type="text" class="form-control" name="client_name" autofocus required>
-                    </div>
-                    <div class="form-group col-6">
-                      <label for="address">Business/Home Address</label>
-                      <textarea class="form-control" id="address" name="address" row="3" col="3" autofocus
-                        required></textarea>
-                    </div>
-                  </div>
-
-                  <!-- Row 2 -->
-                  <div class="row">
-                    <div class="form-group col-6">
-                      <label for="phone">Phone</label>
-                      <input id="phone" type="text" class="form-control" name="phone" autofocus required>
-                    </div>
-                    <div class="form-group col-6">
-                      <label for="coordinate">Accurate GPS Coordinate</label>
-                      <input id="coordinate" type="text" class="form-control" name="coordinate" autofocus required>
-                    </div>
-                  </div>
-
-                  <div class="form-header-label">Any Other Information</div>
-
-
-                  <!-- Row 3 -->
-                  <div class="row">
-                    <div class="form-group col-6">
-                      <label>Length of Cable required for the installation</label>
-                      <input type="text" class="form-control" id="cableLength" name="cable_length" autofocus required />
-                    </div>
-                    <div class="form-group col-6">
-                      <label for="other_info">Any Other Necessary Information</label>
-                      <textarea class="form-control" id="otherInfo" name="other_info" row="3" col="3" autofocus
-                        required></textarea>
-                    </div>
-                  </div>
-
-
-                  <!-- Row 4 -->
-                  <div class="row">
-                    <div class="form-group col-6">
-                      <label for="earth_test_info">Earthing Test Information</label>
-                      <textarea class="form-control" id="earthTestInfo" name="earth_test_info" row="3" col="3" autofocus
-                        required></textarea>
-                    </div>
-                    <div class="form-group col-6">
-                      <label>Survey Conducted By</label>
-                      <input type="text" class="form-control" id="conductedBy" name="conducted_by" autofocus required />
-                    </div>
-
-                  </div>
-
-
-
-
-                  <div class="form-group">
-                    <!-- <label for="email">User ID</label> -->
-                    <input type="hidden" name="id_session" value="<?php echo $id_session; ?>" class="form-control"
-                      name="id_session">
-                  </div>
-
-                  <div class="form-group">
-                    <button type="submit" name="create-site-survey-customer-details" class="btn btn-primary btn-block">
-                      Submit and Continue Form
-                    </button>
-                  </div>
-                </form>
 
               </div>
             </div>
@@ -178,19 +112,19 @@
         <div class="footer-left">
           <?php
               logoutText();
-              ?>
+        ?>
         </div>
         <div class="footer-right"></div>
       </footer>
     </div>
   </div>
 
-
   <!-- Sweet Alert -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="../assets/sweetalert/js/sweetalert2.min.js"></script>
 
-  <script src="../dist/modules/jquery.min.js"></script>
+
+  <!-- <script src="../dist/modules/jquery.min.js"></script> -->
   <script src="../dist/modules/popper.js"></script>
   <script src="../dist/modules/tooltip.js"></script>
   <script src="../dist/modules/bootstrap/js/bootstrap.min.js"></script>
@@ -200,6 +134,13 @@
 
   <script src="../dist/modules/chart.min.js"></script>
   <script src="../dist/modules/summernote/summernote-lite.js"></script>
+
+  <!-- Data Table JS -->
+  <script src="../modules/datatables/datatables.min.js"></script>
+
+
+  <!-- BOOTBOX DELETE POP UP MODAL SCRIPT FOR TABLE RECORD DELETE -->
+  <script type="text/javascript" src="./../dist/modules/bootbox.min.js"></script>
 
   <script src="../dist/js/scripts.js"></script>
   <script src="../dist/js/custom.js"></script>
@@ -259,6 +200,66 @@
 
     });
   });
+  </script>
+
+  <!-- Data Table Script -->
+  <script>
+  $(document).ready(function() {
+    $('#userData').DataTable();
+  });
+  </script>
+
+
+
+  <!-- Delete user Record Sweet Alert -->
+  <script>
+  $(document).ready(function() {
+
+    // readOrderForms* it will load products when document loads */
+
+    $(document).on('click', '#delete-user-record', function(e) {
+
+      var userId = $(this).data('id');
+      SwalDelete(userId);
+      e.preventDefault();
+    });
+
+  });
+
+  function SwalDelete(userId) {
+
+    swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonsColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete user!',
+      showLoaderOnConfirm: true,
+
+      preConfirm: function() {
+        return new Promise(function(resolve) {
+
+          $.ajax({
+              url: 'delete-user-data.php',
+              type: 'POST',
+              data: 'delete=' + userId,
+              dataType: 'json'
+            })
+            .done(function(response) {
+              swal.fire('Deleted!', response.message, response.status, 6000);
+              location.reload(true);
+            })
+            .fail(function() {
+              swal.fire('Oops...', 'Something went wrong with delete process !', 'error');
+            });
+        });
+      },
+      allowOutsideClick: false
+    });
+
+  }
   </script>
 
 </body>

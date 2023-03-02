@@ -12,7 +12,7 @@
   <!-- Shortcut Icon -->
   <link rel="shortcut icon" href="./../dist/img/favicon.fw.png">
 
-  <title>IWN App - Site Survey Form</title>
+  <title>IWN App - Create New User</title>
 
   <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="../dist/modules/ionicons/css/ionicons.min.css">
@@ -78,17 +78,17 @@
       <div class="main-content">
         <section class="section">
           <h1 class="section-header">
-            <div>Site Survey Form
+            <div>Crete New User
               <br>
-              <span style="font-size:11px; color:#FF0000;"> Customer Details</span>
+              <span style="font-size:11px; color:#FF0000;"> User Details</span>
             </div>
           </h1>
           <div class="section-body">
             <div class="card">
               <div class="card-body">
                 <?php
-                if(isset($_POST['create-site-survey-customer-details'])){
-                  createSiteSurveyCustomerDetails(); //here goes the function call
+                if(isset($_POST['create-new-user'])){
+                  createNewUser(); //here goes the function call
                }
                ?>
 
@@ -96,63 +96,56 @@
 
                 <form name="create-site-survey-customer-details" method="POST">
 
-                  <div class="form-header-label">Client Information</div>
+                  <div class="form-header-label">User Information</div>
                   <!-- Row 1 -->
                   <div class="row">
                     <div class="form-group col-6">
-                      <label for="client_name">Name of Organization/Client</label>
-                      <input id="client_name" type="text" class="form-control" name="client_name" autofocus required>
+                      <label for="firstname">Firstname</label>
+                      <input id="firstname" type="text" class="form-control" name="firstname" autofocus required>
                     </div>
                     <div class="form-group col-6">
-                      <label for="address">Business/Home Address</label>
-                      <textarea class="form-control" id="address" name="address" row="3" col="3" autofocus
-                        required></textarea>
+                      <label for="lastname">Lastname</label>
+                      <input id="lastname" type="text" class="form-control" name="lastname" autofocus required>
                     </div>
                   </div>
 
                   <!-- Row 2 -->
                   <div class="row">
                     <div class="form-group col-6">
-                      <label for="phone">Phone</label>
-                      <input id="phone" type="text" class="form-control" name="phone" autofocus required>
+                      <label for="email">Email</label>
+                      <input id="email" type="email" class="form-control" name="email" autofocus required>
                     </div>
                     <div class="form-group col-6">
-                      <label for="coordinate">Accurate GPS Coordinate</label>
-                      <input id="coordinate" type="text" class="form-control" name="coordinate" autofocus required>
+                      <label for="password">Password</label>
+                      <input id="password" type="password" class="form-control" name="password" autofocus required>
                     </div>
                   </div>
-
-                  <div class="form-header-label">Any Other Information</div>
-
 
                   <!-- Row 3 -->
                   <div class="row">
                     <div class="form-group col-6">
-                      <label>Length of Cable required for the installation</label>
-                      <input type="text" class="form-control" id="cableLength" name="cable_length" autofocus required />
+                      <label for="Position">Position</label>
+                      <select class="form-control" id="position" name="position" required>
+                        <option disabled="disabled" selected="selected">Select a Position</option>
+                        <option value="CTO">CTO</option>
+                        <option value="Managing Director">Managing Director</option>
+                        <option value="Business Manager">Business Manager</option>
+                        <option value="Network Engineer">Network Engineer</option>
+                        <option value="Customer Support">Customer Support</option>
+                        <option value="Business Executive">Business Executive</option>
+                      </select>
                     </div>
                     <div class="form-group col-6">
-                      <label for="other_info">Any Other Necessary Information</label>
-                      <textarea class="form-control" id="otherInfo" name="other_info" row="3" col="3" autofocus
-                        required></textarea>
+                      <label for="department">Set User priviledge</label>
+                      <select class="form-control" id="position" name="department" required>
+                        <option disabled="disabled" selected="selected">Select a Priviledge</option>
+                        <option value="Super Admin">Super Admin</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Business">Business</option>
+                        <option value="Support">Support</option>
+                      </select>
                     </div>
                   </div>
-
-
-                  <!-- Row 4 -->
-                  <div class="row">
-                    <div class="form-group col-6">
-                      <label for="earth_test_info">Earthing Test Information</label>
-                      <textarea class="form-control" id="earthTestInfo" name="earth_test_info" row="3" col="3" autofocus
-                        required></textarea>
-                    </div>
-                    <div class="form-group col-6">
-                      <label>Survey Conducted By</label>
-                      <input type="text" class="form-control" id="conductedBy" name="conducted_by" autofocus required />
-                    </div>
-
-                  </div>
-
 
 
 
@@ -163,8 +156,8 @@
                   </div>
 
                   <div class="form-group">
-                    <button type="submit" name="create-site-survey-customer-details" class="btn btn-primary btn-block">
-                      Submit and Continue Form
+                    <button type="submit" name="create-new-user" class="btn btn-primary btn-block">
+                      Create User
                     </button>
                   </div>
                 </form>

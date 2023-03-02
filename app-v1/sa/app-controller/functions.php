@@ -61,6 +61,7 @@ function noOfUsers(){
 
 }
 
+
 //create function to count number of internet service order form 
 function noOfInternetServiceOrderForm(){
     global $dbc;
@@ -101,58 +102,324 @@ function noOfLeaseForm(){
 }
 
 
+/*********************
+ * USER FUNCTIONS HERE
+ */
+
+ // Function to create new user
+function createNewUser(){
+    global $dbc;
+
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $position = $_POST['position'];
+    $department = $_POST['department'];
+    $id_session = $_POST['id_session'];
+
+    // Create Random Unique Id
+    $randomUID = md5(microtime(true).mt_Rand());
+
+    // Generate date - Lagos time format
+    date_default_timezone_set("Africa/Lagos");
+
+    $date = date('M d, Y');
+    // $date = date('M d, Y', time());
+    
+    // Hash Password Here
+    $hashPassword = md5($_POST['password']); //encrypt password
+
+    
+
+    // Get username for user for the history table
+    $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+    $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
+
+    $row=mysqli_fetch_array($doGetNameQuery);
+    $getEmail = $row['email'];
+
+    // check if user already exist via email
+    $checkUserQuery = "SELECT * FROM users WHERE email='$email'";
+    $docheckUserQuery = mysqli_query($dbc, $checkUserQuery);
+    $countRow = mysqli_num_rows($docheckUserQuery);
+
+          // Conditional statement here
+          if( $countRow > 0) {
+            echo '
+            <script>
+            setTimeout(function () { 
+              swal.fire({
+                title: "Error!",
+                text: "User ['.$firstname.' '.$lastname.'] already exist.",
+                icon: "error",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                scrollbarPadding: false,          
+                confirmButtonText: "Close"
+              },
+              ); }, 1000); 
+              </script>
+              ';                 
+  
+        } else{
+    
+            // Insert into app history table
+            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new user - $firstname $lastname')";
+
+            $insertNewUser = "INSERT INTO users (firstname, lastname, email, password, normal_password, position, department, active_status) 
+            VALUES ('$firstname', '$lastname', '$email', '$hashPassword', '$password', '$position', '$department', '1')";
+            $doNewUser = mysqli_query($dbc, $insertNewUser);
+            
+            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+            
+
+    // echo '<script type="text/javascript">';
+    // echo 'setTimeout(function () { swal.fire("Success!"," Site Survey Form Created Successfully For '.$client_name.'.","success");';
+    // echo '}, 1000);</script>';
+
+    echo '<script type="text/javascript">';
+    echo 'setTimeout(function () { swal.fire("Success!"," User ['.$firstname.' '.$lastname.'] sucessfully created. Click OK to view all users","success").then( () => {
+    location.href = "manage-users"});';
+    echo '}, 1000);
+    </script>';
+
+    // echo json_encode($doInsertCategoryName);
+        }
+
+
+}
+
+// Function to manage users
+function manageUsers(){
+    global $dbc;
+    $selectUserData = "SELECT * FROM users ORDER BY user_id DESC";
+    $doSelectUserData = mysqli_query($dbc, $selectUserData);
+    $checkIfNotEmpty = mysqli_num_rows($doSelectUserData);
+
+    $sn = 0;
+
+    if($checkIfNotEmpty > 0){
+        echo '
+        <table id="userData" class="table table-striped">
+        <thead style="font-size:12px;">
+            <tr>
+                <th>SN</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Position</th>
+                <th>Priviledge</th>
+                <th>Status</th>
+                <th style="width: 20%;">Action</th>
+            </tr>
+        </thead>
+        <tfoot style="font-size:12px;">
+            <tr>
+            <th>SN</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Position</th>
+            <th>Priviledge</th>
+            <th>Status</th>
+            <th style="width: 20%;">Action</th>
+        </tr>
+        </tfoot>
+        ';
+        while($row = mysqli_fetch_array($doSelectUserData))
+        
+        {
+            $sn++;
+            $userId = $row["user_id"];
+            $userName = $row["firstname"] .' '. $row["lastname"];
+            $activeStatus = $row["active_status"];
+
+            //  encode user/User ID with PHP base64_encode function
+            $secret = base64_encode($userId);
+
+            // Automate the Active status process here
+            if ($activeStatus == 1){
+                $activeStatusBtn = '<a type="button" class="btn btn-sm btn-danger deactivate_user" user-id="'.$userId.'" user-name="'.$userName.'" href="javascript:void(0)"><i class="ion-power"></i></a>';
+
+            } else{
+
+                $activeStatusBtn = '<a type="button" class="btn btn-sm btn-success activate_user" user-id="'.$userId.'" user-name="'.$userName.'" href="javascript:void(0)"><i class="ion-power"></i></a>';
+
+
+            }
+
+
+            echo '
+            <tr style="font-size:12px;">
+            <td> '.$sn.' </td>
+            <td> '.$row["firstname"].' '.$row["lastname"].' </td>
+            <td> '.$row["email"].' </td>
+            <td> '.$row["position"].' </td>
+            <td> '.$row["department"].' </td>
+            <td> '.$activeStatusBtn.' </td>
+            <td> <a href="edit-user-record?id='.$secret.'" class="btn btn-sm btn-info" ><i class="ion-edit"></i></a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-danger" id="delete-user-record" data-id="'.$userId.'"><i class="ion-trash-a"></i></a>
+            </td>
+            </tr>
+            
+            
+            ';
+            
+
+        }
+        
+
+    
+        echo '</table>';
+        
+
+    }else{
+        echo '
+        <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+          <button class="close" data-dismiss="alert">
+            <span>&times;</span>
+          </button>
+        No Record Data to show!
+        </div>
+        </div>
+        ';
+
+    }
+
+
+}
+
+// Function to update user data
+function updateUserData(){
+    global $dbc;
+  
+    // if (isset($_POST['create_category'])){
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $email = $_POST['email'];
+        $active_status = $_POST['active_status'];
+        $position = $_POST['position'];
+        $department = $_POST['department'];
+        $user_id = $_POST['user_id'];
+        $id_session = $_POST['id_session'];
+  
+        // Secure Input Data 
+        $firstname = mysqli_real_escape_string($dbc, $firstname);
+        $lastname = mysqli_real_escape_string($dbc, $lastname);
+        $email = mysqli_real_escape_string($dbc, $email);
+        $position = mysqli_real_escape_string($dbc, $position);
+        $department = mysqli_real_escape_string($dbc, $department);
+        $active_status = mysqli_real_escape_string($dbc, $active_status);
+        
+  
+        // Generate date/time - Lagos time format
+        date_default_timezone_set("Africa/Lagos");
+  
+        $date = date('M d, Y');
+        $time = date('h:ia', time());
+  
+        // Get username of user for user history table
+        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
+    
+        $row = mysqli_fetch_array($doGetNameQuery);
+        $getUserID = $row['user_id'];
+        $getFirstName = $row['firstname'];
+        $getUserEmail = $row['email'];
+  
+        // Insert into app history table
+        $insertUserActionHistory = "INSERT INTO app_history (email, action) VALUES ('$getUserEmail', 'Updated User Data - $firstname $lastname')";
+  
+        // Update User Record in Users Login Table in database
+        $updateUserData = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', email = '$email', position = '$position', department = '$department', active_status = '$active_status' WHERE user_id = '$user_id'";
+  
+          
+            $doUpdateUserData = mysqli_query($dbc, $updateUserData);
+  
+            $doUpdateUserData = mysqli_query($dbc, $updateUserData);
+  
+            $doInsertUserHistory = mysqli_query($dbc, $insertUserActionHistory);
+  
+            echo '
+            <script>
+            setTimeout(function () { 
+              swal.fire({
+                title: "Success!",
+                text: "You have successfully updated user data for '.$firstname.' '.$lastname.'.",
+                icon: "success",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                scrollbarPadding: false,        
+                confirmButtonText: "OK"
+              }
+              )
+              .then(function (result) {
+                if (result.value) {
+                    window.location = "./manage-users";
+                }
+            }); }, 1000); 
+              </script>                 
+      ';
+  
+            // echo json_encode($doInsertCategoryName);
+}
+
+  
+
+  ///////END USER 
+
+
 // Function to create internet change order form
 function createInternetChangeOrderForm(){
     global $dbc;
 
-        $customer_name = $_POST['customer_name'];
-        $customer_address = $_POST['customer_address'];
-        $customer_email = $_POST['customer_email'];
-        $customer_phone = $_POST['customer_phone'];
-        $acct_mgr_name = $_POST['acct_mgr_name'];
-        $acct_mgr_email = $_POST['acct_mgr_email'];
-        $current_plan = $_POST['current_plan'];
-        $current_plan_price = $_POST['current_plan_price'];
-        $req_new_plan = $_POST['req_new_plan'];
-        $new_plan_price = $_POST['new_plan_price'];
-        $change_date = $_POST['change_date'];
-        $change_req_by = $_POST['change_req_by'];
-        $remarks = $_POST['remarks'];
-        $id_session = $_POST['id_session'];
+    $customer_name = $_POST['customer_name'];
+    $customer_address = $_POST['customer_address'];
+    $customer_email = $_POST['customer_email'];
+    $customer_phone = $_POST['customer_phone'];
+    $acct_mgr_name = $_POST['acct_mgr_name'];
+    $acct_mgr_email = $_POST['acct_mgr_email'];
+    $current_plan = $_POST['current_plan'];
+    $current_plan_price = $_POST['current_plan_price'];
+    $req_new_plan = $_POST['req_new_plan'];
+    $new_plan_price = $_POST['new_plan_price'];
+    $change_date = $_POST['change_date'];
+    $change_req_by = $_POST['change_req_by'];
+    $remarks = $_POST['remarks'];
+    $id_session = $_POST['id_session'];
 
-        // Create Random Unique Id
-        $randomUID = md5(microtime(true).mt_Rand());
+    // Create Random Unique Id
+    $randomUID = md5(microtime(true).mt_Rand());
 
-        // Get username for user for the history table
-        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
-        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
-    
-        $row=mysqli_fetch_array($doGetNameQuery);
-        $getEmail = $row['email'];
+    // Get username for user for the history table
+    $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+    $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
 
-        // Check if customer record existed in table
+    $row=mysqli_fetch_array($doGetNameQuery);
+    $getEmail = $row['email'];
 
-
-
-            // Insert into app history table
-            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new internet service change order form for $customer_name')";
-
-            $insertChangeOrderForm = "INSERT INTO change_internet_service_order_form (customer_name, customer_address, customer_email, customer_phone, acct_mgr_name, acct_mgr_email, current_plan, current_plan_price, req_new_plan, new_plan_price, change_date, change_req_by, remarks, form_id) 
-            VALUES ('$customer_name', '$customer_address', '$customer_email', '$customer_phone', '$acct_mgr_name', '$acct_mgr_email', '$current_plan', '$current_plan_price', '$req_new_plan', '$new_plan_price', '$change_date', '$change_req_by', '$remarks', '$randomUID')";
-            $doInsertChangeOrderForm = mysqli_query($dbc, $insertChangeOrderForm);
-            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+    // Check if customer record existed in table
 
 
-            echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!","Internet service change order form for '.$customer_name.' created successfully. Click OK to view form data","success").then( () => {
+
+    // Insert into app history table
+    $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new internet service change order form for $customer_name')";
+
+    $insertChangeOrderForm = "INSERT INTO change_internet_service_order_form (customer_name, customer_address, customer_email, customer_phone, acct_mgr_name, acct_mgr_email, current_plan, current_plan_price, req_new_plan, new_plan_price, change_date, change_req_by, remarks, form_id) 
+    VALUES ('$customer_name', '$customer_address', '$customer_email', '$customer_phone', '$acct_mgr_name', '$acct_mgr_email', '$current_plan', '$current_plan_price', '$req_new_plan', '$new_plan_price', '$change_date', '$change_req_by', '$remarks', '$randomUID')";
+    $doInsertChangeOrderForm = mysqli_query($dbc, $insertChangeOrderForm);
+    $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+
+
+    echo '<script type="text/javascript">';
+    echo 'setTimeout(function () { swal.fire("Success!","Internet service change order form for '.$customer_name.' created successfully. Click OK to view form data","success").then( () => {
     location.href = "change-order-record"});';
-            echo '}, 1000);
-            </script>';        
+    echo '}, 1000);
+    </script>';        
 
             // echo json_encode($doInsertCategoryName);
 
-
-        }
+}
 
         
 // Function to manage change order form for internet service
@@ -459,56 +726,56 @@ function InternetChangeOrderForm($form_id){
 function createInternetServiceOrderForm(){
     global $dbc;
 
-        $f_name = $_POST['f_name'];
-        $h_address = $_POST['h_address'];
-        $phone = $_POST['phone'];
-        $email = $_POST['email'];
-        $web_address = $_POST['web_address'];
-        $cp_name = $_POST['cp_name'];
-        $cp_phone = $_POST['cp_phone'];
-        $cp_email = $_POST['cp_email'];
-        $cpb_name = $_POST['cpb_name'];
-        $cpb_phone = $_POST['cpb_phone'];
-        $cpb_email = $_POST['cpb_email'];
-        $plan = $_POST['plan'];
-        $non_recurrent_cost = $_POST['non_recurrent_cost'];
-        $installation_date = $_POST['installation_date'];
-        $official_info = $_POST['official_info'];
-        $id_session = $_POST['id_session'];
+    $f_name = $_POST['f_name'];
+    $h_address = $_POST['h_address'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $web_address = $_POST['web_address'];
+    $cp_name = $_POST['cp_name'];
+    $cp_phone = $_POST['cp_phone'];
+    $cp_email = $_POST['cp_email'];
+    $cpb_name = $_POST['cpb_name'];
+    $cpb_phone = $_POST['cpb_phone'];
+    $cpb_email = $_POST['cpb_email'];
+    $plan = $_POST['plan'];
+    $non_recurrent_cost = $_POST['non_recurrent_cost'];
+    $installation_date = $_POST['installation_date'];
+    $official_info = $_POST['official_info'];
+    $id_session = $_POST['id_session'];
 
-        // Create Random Unique Id
-        $randomUID = md5(microtime(true).mt_Rand());
+    // Create Random Unique Id
+    $randomUID = md5(microtime(true).mt_Rand());
 
-        // Get username for user for the history table
-        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
-        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
-    
-        $row=mysqli_fetch_array($doGetNameQuery);
-        $getEmail = $row['email'];
+    // Get username for user for the history table
+    $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+    $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
 
-        // Check if customer record existed in table
+    $row=mysqli_fetch_array($doGetNameQuery);
+    $getEmail = $row['email'];
 
-
-
-            // Insert into app history table
-            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new internet service order form for $f_name')";
-
-            $insertIPOrderForm = "INSERT INTO ip_order_form (f_name, h_address, phone, email, web_address, cp_name, cp_phone, cp_email, cpb_name, cpb_phone, cpb_email, plan, non_recurrent_cost, installation_date, official_info, form_id) 
-            VALUES ('$f_name', '$h_address', '$phone', '$email', '$web_address', '$cp_name', '$cp_phone', '$cp_email', '$cpb_name', '$cpb_phone', '$cpb_email', '$plan', '$non_recurrent_cost', '$installation_date', '$official_info', '$randomUID')";
-            $doIPOrderForm = mysqli_query($dbc, $insertIPOrderForm);
-            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+    // Check if customer record existed in table
 
 
-            echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!","Internet service order form for '.$f_name.' created successfully. Click OK to view form data","success").then( () => {
+
+    // Insert into app history table
+    $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new internet service order form for $f_name')";
+
+    $insertIPOrderForm = "INSERT INTO ip_order_form (f_name, h_address, phone, email, web_address, cp_name, cp_phone, cp_email, cpb_name, cpb_phone, cpb_email, plan, non_recurrent_cost, installation_date, official_info, form_id) 
+    VALUES ('$f_name', '$h_address', '$phone', '$email', '$web_address', '$cp_name', '$cp_phone', '$cp_email', '$cpb_name', '$cpb_phone', '$cpb_email', '$plan', '$non_recurrent_cost', '$installation_date', '$official_info', '$randomUID')";
+    $doIPOrderForm = mysqli_query($dbc, $insertIPOrderForm);
+    $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+
+
+    echo '<script type="text/javascript">';
+    echo 'setTimeout(function () { swal.fire("Success!","Internet service order form for '.$f_name.' created successfully. Click OK to view form data","success").then( () => {
     location.href = "ip-order-form-record"});';
-            echo '}, 1000);
-            </script>';        
+    echo '}, 1000);
+    </script>';        
 
-            // echo json_encode($doInsertCategoryName);
+    // echo json_encode($doInsertCategoryName);
 
 
-        }
+}
 
 
 // Function to manage IP order form
@@ -539,7 +806,7 @@ function manageInternetServiceOrderForm(){
             <th>Address</th>
             <th>Phone</th>
             <th style="width: 20%;">Action</th>
-</tr>
+        </tr>
         </tfoot>
         ';
         while($row = mysqli_fetch_array($doSelectIPOrderFormData))
@@ -788,64 +1055,64 @@ function InternetServiceOrderForm($form_id){
 function createEnterpriseServiceOrderForm(){
     global $dbc;
 
-        $f_name = $_POST['f_name'];
-        $h_address = $_POST['h_address'];
-        $phone = $_POST['phone'];
-        $email = $_POST['email'];
-        $web_address = $_POST['web_address'];
-        $cp_name = $_POST['cp_name'];
-        $cp_phone = $_POST['cp_phone'];
-        $cp_email = $_POST['cp_email'];
-        $cpb_name = $_POST['cpb_name'];
-        $cpb_phone = $_POST['cpb_phone'];
-        $cpb_email = $_POST['cpb_email'];
-        $plan = $_POST['plan'];
-        $bandwidth_cost = $_POST['bandwidth_cost'];
-        $non_recurrent_cost = $_POST['non_recurrent_cost'];
-        $installation_date = $_POST['installation_date'];
-        $official_info = $_POST['official_info'];
-        $id_session = $_POST['id_session'];
+    $f_name = $_POST['f_name'];
+    $h_address = $_POST['h_address'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $web_address = $_POST['web_address'];
+    $cp_name = $_POST['cp_name'];
+    $cp_phone = $_POST['cp_phone'];
+    $cp_email = $_POST['cp_email'];
+    $cpb_name = $_POST['cpb_name'];
+    $cpb_phone = $_POST['cpb_phone'];
+    $cpb_email = $_POST['cpb_email'];
+    $plan = $_POST['plan'];
+    $bandwidth_cost = $_POST['bandwidth_cost'];
+    $non_recurrent_cost = $_POST['non_recurrent_cost'];
+    $installation_date = $_POST['installation_date'];
+    $official_info = $_POST['official_info'];
+    $id_session = $_POST['id_session'];
 
-        // Create Random Unique Id
-        $randomUID = md5(microtime(true).mt_Rand());
+    // Create Random Unique Id
+    $randomUID = md5(microtime(true).mt_Rand());
 
-        // Get username for user for the history table
-        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
-        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
-    
-        $row=mysqli_fetch_array($doGetNameQuery);
-        $getEmail = $row['email'];
+    // Get username for user for the history table
+    $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+    $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
 
-        // Check if customer record existed in table
+    $row=mysqli_fetch_array($doGetNameQuery);
+    $getEmail = $row['email'];
 
-        // Generate date - Lagos time format
-        date_default_timezone_set("Africa/Lagos");
+    // Check if customer record existed in table
 
-        $date = date('M d, Y');
-        // $date = date('M d, Y', time());
+    // Generate date - Lagos time format
+    date_default_timezone_set("Africa/Lagos");
+
+    $date = date('M d, Y');
+    // $date = date('M d, Y', time());
         
 
 
 
-            // Insert into app history table
-            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new enterprise internet service order form for $f_name')";
+    // Insert into app history table
+    $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new enterprise internet service order form for $f_name')";
 
-            $insertEnterpriseOrderForm = "INSERT INTO ent_order_form (f_name, h_address, phone, email, web_address, cp_name, cp_phone, cp_email, cpb_name, cpb_phone, cpb_email, plan, bandwidth_cost, non_recurrent_cost, installation_date, official_info, form_id, date_submitted) 
-            VALUES ('$f_name', '$h_address', '$phone', '$email', '$web_address', '$cp_name', '$cp_phone', '$cp_email', '$cpb_name', '$cpb_phone', '$cpb_email', '$plan', '$bandwidth_cost', '$non_recurrent_cost', '$installation_date', '$official_info', '$randomUID', '$date')";
-            $doEnterpriseOrderForm = mysqli_query($dbc, $insertEnterpriseOrderForm);
-            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
+    $insertEnterpriseOrderForm = "INSERT INTO ent_order_form (f_name, h_address, phone, email, web_address, cp_name, cp_phone, cp_email, cpb_name, cpb_phone, cpb_email, plan, bandwidth_cost, non_recurrent_cost, installation_date, official_info, form_id, date_submitted) 
+    VALUES ('$f_name', '$h_address', '$phone', '$email', '$web_address', '$cp_name', '$cp_phone', '$cp_email', '$cpb_name', '$cpb_phone', '$cpb_email', '$plan', '$bandwidth_cost', '$non_recurrent_cost', '$installation_date', '$official_info', '$randomUID', '$date')";
+    $doEnterpriseOrderForm = mysqli_query($dbc, $insertEnterpriseOrderForm);
+    $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
 
 
-            echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!","Enterprise internet service order form for '.$f_name.' created successfully. Click OK to view form data","success").then( () => {
+    echo '<script type="text/javascript">';
+    echo 'setTimeout(function () { swal.fire("Success!","Enterprise internet service order form for '.$f_name.' created successfully. Click OK to view form data","success").then( () => {
     location.href = "enterprise-order-record"});';
-            echo '}, 1000);
-            </script>';        
+    echo '}, 1000);
+    </script>';        
 
-            // echo json_encode($doInsertCategoryName);
+    // echo json_encode($doInsertCategoryName);
 
 
-        }
+}
 
 
 // Function to manage enterprise order form
@@ -876,7 +1143,7 @@ function manageEnterpriseServiceOrderForm(){
             <th>Address</th>
             <th>Phone</th>
             <th style="width: 20%;">Action</th>
-</tr>
+        </tr>
         </tfoot>
         ';
         while($row = mysqli_fetch_array($doSelectEnterpriseOrderFormData))
@@ -1527,58 +1794,58 @@ function createSiteSurveyCustomerDetails(){
     $conducted_by = $_POST['conducted_by'];
     $id_session = $_POST['id_session'];
 
-        // Create Random Unique Id
-        $randomUID = md5(microtime(true).mt_Rand());
+    // Create Random Unique Id
+    $randomUID = md5(microtime(true).mt_Rand());
 
-        // Get username for user for the history table
-        $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
-        $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
+    // Get username for user for the history table
+    $getNameQuery = "SELECT * FROM users WHERE user_id='$id_session'";
+    $doGetNameQuery = mysqli_query($dbc, $getNameQuery);
+
+    $row=mysqli_fetch_array($doGetNameQuery);
+    $getEmail = $row['email'];
+
+    // Generate date - Lagos time format
+    date_default_timezone_set("Africa/Lagos");
+
+    $date = date('M d, Y');
+    // $date = date('M d, Y', time());
+
+    //Create customer upload folder here
+    $dir = "./../siteSurveyUploads/$client_name";
+
+    //Remove space from folder name and replace with an underscore
+    $renameFolder =  str_replace(" ","_",$dir);
+
+
+
+    // Insert into app history table
+    $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new site survey form for $client_name')";
+
+    $insertSiteSurveyCustomerDetails = "INSERT INTO site_survey_customer_details (client_name, address, phone, coordinate, cable_length, other_info, earth_test_info, conducted_by, form_id, date_submitted) 
+    VALUES ('$client_name', '$address', '$phone', '$coordinate', '$cable_length', '$other_info', '$earth_test_info', '$conducted_by', '$randomUID', '$date')";
+    $doSiteSurveyCustomerDetails = mysqli_query($dbc, $insertSiteSurveyCustomerDetails);
+    $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
     
-        $row=mysqli_fetch_array($doGetNameQuery);
-        $getEmail = $row['email'];
-
-        // Generate date - Lagos time format
-        date_default_timezone_set("Africa/Lagos");
-
-        $date = date('M d, Y');
-        // $date = date('M d, Y', time());
-        
-        //Create customer upload folder here
-        $dir = "./../siteSurveyUploads/$client_name";
-        
-        //Remove space from folder name and replace with an underscore
-        $renameFolder =  str_replace(" ","_",$dir);
-
-        
-
-            // Insert into app history table
-            $insertUserHistory = "INSERT INTO app_history (email, action) VALUES ('$getEmail', 'Created a new site survey form for $client_name')";
-
-            $insertSiteSurveyCustomerDetails = "INSERT INTO site_survey_customer_details (client_name, address, phone, coordinate, cable_length, other_info, earth_test_info, conducted_by, form_id, date_submitted) 
-            VALUES ('$client_name', '$address', '$phone', '$coordinate', '$cable_length', '$other_info', '$earth_test_info', '$conducted_by', '$randomUID', '$date')";
-            $doSiteSurveyCustomerDetails = mysqli_query($dbc, $insertSiteSurveyCustomerDetails);
-            $doInsertUserHistory = mysqli_query($dbc, $insertUserHistory);
-            
-            // create directory if not exists in upload/ directory
-             if(!is_dir($renameFolder)){
-               mkdir($renameFolder, 0755);
-             }
-
-
-            // echo '<script type="text/javascript">';
-            // echo 'setTimeout(function () { swal.fire("Success!"," Site Survey Form Created Successfully For '.$client_name.'.","success");';
-            // echo '}, 1000);</script>';
-
-            echo '<script type="text/javascript">';
-            echo 'setTimeout(function () { swal.fire("Success!"," Site Survey Form Created Successfully For '.$client_name.'. Click OK to upload survey pictures","success").then( () => {
-    location.href = "site-survey-media-upload"});';
-            echo '}, 1000);
-            </script>';
-
-            // echo json_encode($doInsertCategoryName);
-
-
+    // create directory if not exists in upload/ directory
+        if(!is_dir($renameFolder)){
+        mkdir($renameFolder, 0755);
         }
+
+
+    // echo '<script type="text/javascript">';
+    // echo 'setTimeout(function () { swal.fire("Success!"," Site Survey Form Created Successfully For '.$client_name.'.","success");';
+    // echo '}, 1000);</script>';
+
+    echo '<script type="text/javascript">';
+    echo 'setTimeout(function () { swal.fire("Success!"," Site Survey Form Created Successfully For '.$client_name.'. Click OK to upload survey pictures","success").then( () => {
+    location.href = "site-survey-media-upload"});';
+    echo '}, 1000);
+    </script>';
+
+    // echo json_encode($doInsertCategoryName);
+
+
+}
 
 
 // Function to create site survey customer details
@@ -3319,7 +3586,7 @@ function logoutText(){
 
 //Logout Function
 function logout(){
-    // global $connection;
+    // global $dbc;
     // $logoutQuery = "SELECT * FROM users WHERE user_id='$id_session'";
     // $doLogoutQuery = mysqli_query($dbc, $logoutQuery);
     // $row=mysqli_fetch_array($doLogoutQuery);
@@ -3350,5 +3617,4 @@ function logout(){
 
 }
 
-?>
 ?>

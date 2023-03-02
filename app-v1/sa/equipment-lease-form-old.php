@@ -4,9 +4,11 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"
+    name="viewport">
   <!-- Shortcut Icon -->
   <link rel="shortcut icon" href="../../dist/img/favicon.fw.png">
 
@@ -31,8 +33,10 @@
       <nav class="navbar navbar-expand-lg main-navbar">
         <form class="form-inline mr-auto">
           <ul class="navbar-nav mr-3">
-            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="ion ion-navicon-round"></i></a></li>
-            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="ion ion-search"></i></a></li>
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="ion ion-navicon-round"></i></a>
+            </li>
+            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
+                  class="ion ion-search"></i></a></li>
           </ul>
           <div class="search-element">
             <input class="form-control" type="search" placeholder="Search" aria-label="Search">
@@ -40,7 +44,8 @@
           </div>
         </form>
         <ul class="navbar-nav navbar-right">
-          <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep"><i class="ion ion-ios-bell-outline"></i></a>
+          <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
+              class="nav-link notification-toggle nav-link-lg beep"><i class="ion ion-ios-bell-outline"></i></a>
             <div class="dropdown-menu dropdown-list dropdown-menu-right">
               <div class="dropdown-header">Notifications
                 <div class="float-right">
@@ -50,8 +55,9 @@
             </div>
           </li>
           <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
-            <i class="ion ion-android-person d-lg-none"></i>
-            <div class="d-sm-none d-lg-inline-block">Hi, <?php echo getUserName($id_session); ?></div></a>
+              <i class="ion ion-android-person d-lg-none"></i>
+              <div class="d-sm-none d-lg-inline-block">Hi, <?php echo getUserName($id_session); ?></div>
+            </a>
             <div class="dropdown-menu dropdown-menu-right">
               <a href="profile" class="dropdown-item has-icon">
                 <i class="ion ion-android-person"></i> Profile
@@ -90,9 +96,9 @@
 
                 <form name="create-ip-order-form" method="POST">
 
-                <div class="form-header-label">Client Details</div>
-                <!-- Row 1 -->
-                <div class="row">
+                  <div class="form-header-label">Client Details</div>
+                  <!-- Row 1 -->
+                  <div class="row">
                     <div class="form-group col-12">
                       <label for="client_name">Client's Name</label>
                       <input id="clientsName" type="text" class="form-control" name="client_name" autofocus required>
@@ -105,8 +111,8 @@
 
 
                   <div class="form-header-label">Customer Primary Details</div>
-                <!-- Row 2 -->
-                <div class="row">
+                  <!-- Row 2 -->
+                  <div class="row">
                     <div class="form-group col-6">
                       <label for="title">Title</label>
                       <select class="form-control" id="title" name="title" required>
@@ -120,14 +126,15 @@
                       </select>
                     </div>
                     <div class="form-group col-6">
-                    <label for="contact_person">Contact Person</label>
-                      <input id="contactPerson" type="text" class="form-control" name="customer_name" autofocus required>
+                      <label for="contact_person">Contact Person</label>
+                      <input id="contactPerson" type="text" class="form-control" name="customer_name" autofocus
+                        required>
                     </div>
                   </div>
 
                   <!-- Row 3 -->
                   <div class="row">
-                  <div class="form-group col-6">
+                    <div class="form-group col-6">
                       <label>Telephone Number</label>
                       <input id="telephoneNumber" type="text" class="form-control" name="phone" autofocus required>
                     </div>
@@ -138,18 +145,19 @@
                     </div>
                   </div>
 
-                <!-- Row 4 -->
-                <div class="row">
-                  <div class="form-group col-12">
+                  <!-- Row 4 -->
+                  <div class="row">
+                    <div class="form-group col-12">
                       <label>Address</label>
-                      <textarea class="form-control" id="address" name="address" row="3" col="3" autofocus required></textarea>
+                      <textarea class="form-control" id="address" name="address" row="3" col="3" autofocus
+                        required></textarea>
                     </div>
                   </div>
 
 
                   <div class="form-header-label">Device Details</div>
-                <!-- Row 5 -->
-                <div class="row">
+                  <!-- Row 5 -->
+                  <div class="row">
                     <div class="form-group col-6">
                       <label for="device_model_1">Device Model 1</label>
                       <select class="form-control" id="devModel1" name="device_model_1">
@@ -174,7 +182,7 @@
                       </select>
                     </div>
                     <div class="form-group col-6">
-                    <label for="dev_mac_add_1">Device Mac Address 1</label>
+                      <label for="dev_mac_add_1">Device Mac Address 1</label>
                       <input id="devMacAdd1" type="text" class="form-control" name="mac_add_1" autofocus>
                     </div>
                   </div>
@@ -205,12 +213,12 @@
                       </select>
                     </div>
                     <div class="form-group col-6">
-                    <label for="dev_mac_add_2">Device Mac Address 2</label>
+                      <label for="dev_mac_add_2">Device Mac Address 2</label>
                       <input id="devMacAdd2" type="text" class="form-control" name="mac_add_2" autofocus>
                     </div>
                   </div>
-                <!-- Row 7 -->
-                <div class="row">
+                  <!-- Row 7 -->
+                  <div class="row">
                     <div class="form-group col-6">
                       <label for="device_model_3">Device Model 3</label>
                       <select class="form-control" id="devModel1" name="device_model_3">
@@ -235,7 +243,7 @@
                       </select>
                     </div>
                     <div class="form-group col-6">
-                    <label for="dev_mac_add_3">Device Mac Address 3</label>
+                      <label for="dev_mac_add_3">Device Mac Address 3</label>
                       <input id="devMacAdd3" type="text" class="form-control" name="mac_add_3" autofocus>
                     </div>
                   </div>
@@ -266,7 +274,7 @@
                       </select>
                     </div>
                     <div class="form-group col-6">
-                    <label for="dev_mac_add_4">Device Mac Address 4</label>
+                      <label for="dev_mac_add_4">Device Mac Address 4</label>
                       <input id="devMacAdd4" type="text" class="form-control" name="mac_add_4" autofocus>
                     </div>
                   </div>
@@ -274,11 +282,12 @@
                   <div class="form-header-label">Date & Witness Details</div>
                   <!-- Row 9 -->
                   <div class="row">
-                  <div class="form-group col-6">
+                    <div class="form-group col-6">
                       <label for="agreement_date">Agreement Date</label>
-                      <input id="agreementDate" type="date" class="form-control" name="agreement_date" autofocus required>
+                      <input id="agreementDate" type="date" class="form-control" name="agreement_date" autofocus
+                        required>
                     </div>
-                  
+
                     <div class="form-group col-6">
                       <label>Witness Name</label>
                       <input id="witnessName" type="text" class="form-control" name="witness_name" autofocus>
@@ -288,7 +297,8 @@
 
                   <div class="form-group">
                     <!-- <label for="email">User ID</label> -->
-                    <input type="hidden" name="id_session" value="<?php echo $id_session; ?>" class="form-control" name="id_session">
+                    <input type="hidden" name="id_session" value="<?php echo $id_session; ?>" class="form-control"
+                      name="id_session">
                   </div>
 
                   <div class="form-group">
@@ -297,7 +307,7 @@
                     </button>
                   </div>
                 </form>
-                
+
               </div>
             </div>
           </div>
@@ -305,7 +315,7 @@
       </div>
       <footer class="main-footer">
         <div class="footer-left">
-        <?php
+          <?php
               logoutText();
               ?>
         </div>
@@ -326,7 +336,7 @@
   <script src="../dist/modules/nicescroll/jquery.nicescroll.min.js"></script>
   <script src="../dist/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
   <script src="../dist/js/sa-functions.js"></script>
-  
+
   <script src="../dist/modules/chart.min.js"></script>
   <script src="../dist/modules/summernote/summernote-lite.js"></script>
 
@@ -334,61 +344,62 @@
   <script src="../dist/js/custom.js"></script>
   <!-- <script src="../dist/js/demo.js"></script> -->
 
-<!--Logout Sweet Alert -->
-<script type="text/javascript">
-        $(document).ready(function(){
-            $("#logout").click(function(){
+  <!--Logout Sweet Alert -->
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $("#logout").click(function() {
 
-              swal.fire({
-                      title: 'Confirm Logout!',
-                      text: "Are you sure you want to logout of the application?",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, log me out!'                    
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        window.location.href = "logout.php";
-                        Swal.fire(
-                          'Success!',
-                          'You have been logout successfully.',
-                          'success'
-                        )
-                      }
-                    })
+      swal.fire({
+        title: 'Confirm Logout!',
+        text: "Are you sure you want to logout of the application?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, log me out!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "logout.php";
+          Swal.fire(
+            'Success!',
+            'You have been logout successfully.',
+            'success'
+          )
+        }
+      })
 
-            });
-        });
-    </script>
+    });
+  });
+  </script>
 
 
-<script type="text/javascript">
-        $(document).ready(function(){
-            $("#sidebarLogout").click(function(){
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $("#sidebarLogout").click(function() {
 
-                    swal.fire({
-                      title: 'Confirm Logout!',
-                      text: "Are you sure you want to logout of the application?",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, log me out!'                    
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        window.location.href = "logout.php";
-                        Swal.fire(
-                          'Success!',
-                          'You have been logout successfully.',
-                          'success'
-                        )
-                      }
-                    })
+      swal.fire({
+        title: 'Confirm Logout!',
+        text: "Are you sure you want to logout of the application?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, log me out!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "logout.php";
+          Swal.fire(
+            'Success!',
+            'You have been logout successfully.',
+            'success'
+          )
+        }
+      })
 
-            });
-        });
-    </script>
+    });
+  });
+  </script>
 
 </body>
+
 </html>
